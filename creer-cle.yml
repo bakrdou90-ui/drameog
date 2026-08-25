@@ -1,0 +1,87 @@
+name: Créer la clé de signature
+
+# À LANCER UNE SEULE FOIS, avant la première vraie installation.
+#
+# Cette clé est ce qui permettra à toutes les futures mises à jour de s'installer
+# par-dessus l'application, sans effacer les données de la boutique.
+# Perdue, elle ne se remplace pas : il faudrait désinstaller pour repartir.
+#
+# Onglet Actions → « Créer la clé de signature » → Run workflow.
+
+on:
+  workflow_dispatch:
+    inputs:
+      mot_de_passe:
+        description: "Mot de passe de la clé (au moins 6 caractères, notez-le)"
+        required: true
+      nom_boutique:
+        description: "Nom de la boutique"
+        required: true
+        default: "DRAME OG BU LA QUALITE"
+
+jobs:
+  cle:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Installer Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Vérifier le mot de passe
+        run: |
+          if [ ${#MDP} -lt 6 ]; then
+            echo "Le mot de passe doit faire au moins 6 caractères." >&2
+            exit 1
+          fi
+        env:
+          MDP: ${{ inputs.mot_de_passe }}
+
+      - name: Générer la clé
+        run: |
+          mkdir -p sortie
+          keytool -genkeypair -v \
+            -keystore sortie/drame-og.jks \
+            -storetype JKS \
+            -alias drame-og \
+            -keyalg RSA -keysize 2048 -validity 10000 \
+            -storepass "$MDP" -keypass "$MDP" \
+            -dname "CN=$NOM, O=$NOM, L=Bamako, C=ML"
+          base64 -w 0 sortie/drame-og.jks > sortie/cle-en-base64.txt
+        env:
+          MDP: ${{ inputs.mot_de_passe }}
+          NOM: ${{ inputs.nom_boutique }}
+
+      - name: Mode d'emploi
+        run: |
+          cat >> "$GITHUB_STEP_SUMMARY" <<'FIN'
+          ## Votre clé de signature est prête
+
+          **1. Téléchargez-la maintenant.** En bas de cette page, section *Artifacts* :
+          `cle-de-signature`. Elle contient deux fichiers.
+          Elle sera supprimée d'ici un jour — c'est voulu, une clé ne reste pas en ligne.
+
+          **2. Rangez `drame-og.jks` en lieu sûr**, avec son mot de passe : clé USB,
+          disque externe, coffre. C'est ce qui vous permettra de publier des mises à jour.
+          Perdue, elle ne se remplace pas.
+
+          **3. Enregistrez-la dans ce dépôt** — Settings → Secrets and variables →
+          Actions → New repository secret. Créez ces deux secrets :
+
+          | Nom du secret | Contenu |
+          |---|---|
+          | `KEYSTORE_BASE64` | tout le contenu du fichier `cle-en-base64.txt` |
+          | `KEYSTORE_PASSWORD` | le mot de passe que vous venez de choisir |
+
+          **4. Lancez ensuite « Construire l'APK ».** Il produira une application signée,
+          que toutes les versions suivantes pourront mettre à jour sans rien effacer.
+          FIN
+
+      - name: Déposer la clé
+        uses: actions/upload-artifact@v4
+        with:
+          name: cle-de-signature
+          path: sortie/
+          retention-days: 1
+          if-no-files-found: error

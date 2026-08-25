@@ -1,0 +1,41 @@
+name: Publier l'application web
+
+# Met le dossier www/ en ligne sur GitHub Pages, ce qui rend l'application
+# installable sur le téléphone (« Ajouter à l'écran d'accueil ») et utilisable
+# hors ligne. À activer une fois : Réglages du dépôt → Pages → Source : GitHub Actions.
+
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  publier:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploiement.outputs.page_url }}
+    steps:
+      - name: Récupérer le code
+        uses: actions/checkout@v4
+
+      - name: Préparer Pages
+        uses: actions/configure-pages@v5
+
+      - name: Empaqueter le dossier www
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: www
+
+      - name: Mettre en ligne
+        id: deploiement
+        uses: actions/deploy-pages@v4
