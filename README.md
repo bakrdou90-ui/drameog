@@ -7,92 +7,50 @@ des écritures, achats, stock, dettes par tranches, caisses, rapports.
 **Tout tient sur le téléphone.** L'application ne demande aucune connexion internet,
 n'a aucune permission réseau, et vos données ne quittent jamais l'appareil.
 
----
+Un seul code source sert aux deux formes de l'application :
 
-# Par où commencer
-
-**Tout part de GitHub.** Vous y envoyez ce dossier une fois, et GitHub fait le reste
-gratuitement : il fabrique l'application Android, et il peut aussi mettre l'application
-en ligne. Vous n'avez rien à installer sur votre ordinateur — ni Android Studio, ni
-serveur, ni ligne de commande.
-
-**Étape 0, à faire d'abord et une seule fois : envoyer le projet sur GitHub.**
-
-1. Sur **github.com**, connectez-vous → bouton **New** → donnez un nom au dépôt
-   (par exemple `drame-og`) → **Create repository**.
-2. Sur la page qui s'affiche, cliquez le lien **uploading an existing file**.
-3. Ouvrez le dossier `DRAME_OG_ANDROID` sur votre ordinateur, sélectionnez **tout ce
-   qu'il y a dedans** (Ctrl+A) et faites-le glisser dans la page.
-   ⚠️ C'est le **contenu** qu'on envoie, pas le dossier lui-même.
-4. **Commit changes**, en bas.
-
-Vérification immédiate : la page d'accueil du dépôt doit montrer `.github`, `android`,
-`www`, `README.md` — et l'onglet **Actions** doit afficher trois workflows. Si Actions
-est vide, c'est que le dossier d'enveloppe est parti avec : recommencez à l'étape 3.
-
-**Ensuite, choisissez ce que vous voulez.** Les deux sont possibles, dans n'importe
-quel ordre.
-
-| Ce que vous voulez | Allez à | Combien de temps |
+| Forme | Ce que c'est | Ce qu'il faut |
 |---|---|---|
-| **La vraie application Android**, installée sur le téléphone, qui marche sans internet. **C'est ce qu'il vous faut pour la boutique.** | section 2 | ~10 min |
-| Une simple **adresse internet** à ouvrir dans Chrome, pour montrer l'application à quelqu'un ou l'essayer sans installer. Facultatif. | section 1 | ~3 min |
+| **Application web installable** | La page `www/index.html` mise en ligne. Sur Android, « Ajouter à l'écran d'accueil » lui donne son icône et son plein écran, et elle fonctionne hors ligne. | Un hébergement web — ou GitHub Pages, gratuit (voir plus bas) |
+| **Vraie application Android (.apk)** | Le dossier `android/` : une coque légère qui embarque la même page. | Android Studio, **ou** GitHub qui la construit gratuitement pour vous |
 
 ---
 
-## 1. Une adresse internet pour l'application *(facultatif)*
+## 1. La façon la plus rapide : l'installer depuis le web
 
-Cette partie sert à une seule chose : obtenir un lien du genre
-`https://votre-nom.github.io/drame-og/` que vous pouvez ouvrir sur n'importe quel
-téléphone, envoyer à quelqu'un, ou utiliser en attendant d'avoir l'APK.
+1. Déposez le contenu du dossier `www/` sur n'importe quel hébergement en **HTTPS** —
+   par exemple à côté de l'application PHP, dans un sous-dossier `appli/`.
+2. Sur le téléphone Android, ouvrez l'adresse dans **Chrome**.
+3. Menu ⋮ → **Ajouter à l'écran d'accueil** (ou la bannière « Installer l'application »).
 
-**Vous pouvez sauter cette section** et aller directement à la section 2. L'application
-installée n'a besoin d'aucune adresse internet pour fonctionner.
+L'icône DOQ apparaît avec les autres applications. Elle s'ouvre en plein écran, sans
+barre d'adresse, et continue de fonctionner quand le réseau est coupé.
 
-Une fois le projet sur GitHub, l'adresse s'obtient en deux clics :
+> L'adresse doit être en `https://` — c'est une exigence d'Android pour le mode hors ligne.
+> `http://` simple fonctionne aussi si l'adresse est `localhost`.
 
-1. Dans votre dépôt : **Settings** → **Pages** (menu de gauche) →
-   sous *Source*, choisissez **GitHub Actions** → c'est tout, rien à valider d'autre.
-2. Onglet **Actions** → **Publier l'application web** → **Run workflow**.
-   Une minute plus tard, l'adresse s'affiche en haut de la page du workflow.
+### Hébergement gratuit avec GitHub Pages
 
-Cette adresse se met à jour toute seule à chaque fois que vous modifiez le projet.
+Si vous envoyez ce projet sur GitHub, la mise en ligne est automatique :
 
-### L'ajouter à l'écran d'accueil du téléphone
-
-Ouvrez l'adresse dans **Chrome** sur le téléphone, puis menu ⋮ →
-**Ajouter à l'écran d'accueil** (ou la bannière « Installer l'application »).
-
-L'icône DOQ rejoint vos autres applications, s'ouvre en plein écran sans barre d'adresse,
-et continue de fonctionner quand le réseau est coupé.
-
-> **Attention.** Utilisée ainsi, l'application range ses données dans la mémoire du
-> navigateur. Vider l'historique ou changer de téléphone les efface. C'est très bien pour
-> essayer ou pour montrer, mais **pour tenir la comptabilité de la boutique, prenez
-> l'APK de la section 2.**
-
-### Si vous avez déjà votre propre site internet
-
-Vous n'êtes pas obligé de passer par GitHub Pages : copiez simplement le contenu du
-dossier `www/` sur votre hébergement, dans un sous-dossier (par exemple `appli/`),
-et ouvrez cette adresse-là. L'adresse doit commencer par `https://` — sans quoi Android
-refuse le fonctionnement hors ligne.
+1. Créez un dépôt et envoyez-y le contenu de ce dossier.
+2. Dans le dépôt : **Settings → Pages → Source : GitHub Actions**.
+3. À chaque envoi, le fichier `.github/workflows/pages.yml` publie `www/`
+   et vous donne l'adresse `https://votre-nom.github.io/votre-depot/`.
 
 ---
 
-## 2. L'application Android *(c'est celle-ci qu'il vous faut)*
+## 2. Obtenir le fichier .apk
 
-### Sans rien installer : laissez GitHub la construire
+### Sans rien installer : laissez GitHub le construire
 
-Le projet est déjà sur GitHub (étape 0). Il reste deux clics.
-
-1. **D'abord votre clé de signature** — onglet **Actions** →
-   **Créer la clé de signature** → **Run workflow**. C'est l'étape qui décide si vous
-   pourrez mettre à jour l'application plus tard **sans perdre vos données**. Cinq minutes
-   maintenant, ou tout recommencer un jour. Le détail complet est en section 3.
-2. Onglet **Actions** → **Construire l'APK** → **Run workflow**.
-   Il démarre aussi tout seul à chaque modification du projet.
-3. Environ trois minutes plus tard, en bas de la page du workflow, section **Artifacts** :
+1. Envoyez le projet sur GitHub (dépôt privé accepté).
+2. **Créez d'abord votre clé de signature** — voir la section 3 juste après. C'est
+   l'étape qui décide si vous pourrez mettre à jour l'application plus tard sans perdre
+   vos données. Cinq minutes maintenant, ou tout recommencer un jour.
+3. Onglet **Actions** → workflow **Construire l'APK** → **Run workflow**.
+   Il démarre aussi tout seul à chaque envoi de code.
+4. Environ trois minutes plus tard, en bas de la page du workflow, section **Artifacts** :
    téléchargez **DRAME-OG-apk**.
 
 Vous obtenez deux fichiers :
@@ -193,49 +151,6 @@ En plus de cela, l'application garde en permanence une **copie de secours intern
 dernière version saine de vos données. Si le fichier principal devient illisible, elle
 repart de cette copie toute seule au démarrage et vous le signale. Ce filet rattrape un
 incident technique, pas un téléphone perdu : la sauvegarde reste indispensable.
-
----
-
-## 3 bis. Si quelque chose ne marche pas sur GitHub
-
-### L'onglet Actions ne montre aucun workflow
-
-C'est le cas le plus fréquent, et il a toujours la même cause : **le dossier `.github`
-n'est pas à la racine du dépôt.** GitHub ne cherche les workflows qu'à un seul endroit,
-`/.github/workflows/`, jamais plus profond.
-
-Si vous avez envoyé le dossier `DRAME_OG_ANDROID` **entier**, tout se retrouve un cran
-trop bas. La page d'accueil de votre dépôt doit afficher ceci, et rien qui les enveloppe :
-
-```
-.github/     android/     www/     README.md     .gitignore
-```
-
-Si vous voyez à la place un unique dossier `DRAME_OG_ANDROID`, entrez dedans, et
-renvoyez **son contenu** — pas lui.
-
-### « Get Pages site failed » ou une erreur sur la publication web
-
-Les Pages ne sont pas encore activées : **Settings → Pages → Source : GitHub Actions**,
-puis relancez le workflow. Cette activation ne se fait qu'une fois.
-
-### La construction de l'APK échoue tout de suite
-
-Vérifiez que le fichier `android/gradlew` est bien présent dans le dépôt, ainsi que
-`android/gradle/wrapper/gradle-wrapper.jar`. Certains outils d'envoi ignorent les fichiers
-sans extension ou les `.jar` : ce sont eux qui manquent le plus souvent.
-
-### Faut-il laisser un assistant IA modifier le projet ?
-
-Non, et ce n'est pas de la méfiance de principe : le code est terminé et vérifié, il n'y a
-rien à y corriger. Un assistant en mode « autopilot », lui, réécrit des fichiers sans
-demander — un workflow reformaté, et la construction s'arrête de marcher.
-
-Pour envoyer le projet sur GitHub, vous n'avez besoin d'aucun assistant ni d'aucune
-commande — l'étape 0, en haut de ce document, se fait entièrement dans le navigateur.
-
-Si vous utilisez quand même un assistant, choisissez le mode **Interactive** plutôt
-qu'**Autopilot** : il vous montre chaque modification avant de la faire.
 
 ---
 
