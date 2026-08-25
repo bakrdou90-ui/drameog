@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Sauvegarde Android : on inclut le fichier de données de la boutique. -->
+<full-backup-content>
+    <include domain="file" path="donnees.json" />
+</full-backup-content>

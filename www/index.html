@@ -1,0 +1,2064 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>Drame OG Bu La Qualité</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#2B4162" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1A1E17" media="(prefers-color-scheme: dark)">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="DRAME OG">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="icon" href="icons/icon-192.png">
+
+<style>
+/* Polices : embarquées par le système, aucun appel réseau (l'appli doit vivre hors ligne) */
+:root{
+  --font-display:"Archivo","Roboto Condensed","Segoe UI",system-ui,sans-serif;
+  --font-body:"Karla","Roboto","Segoe UI",system-ui,sans-serif;
+  --font-mono:"IBM Plex Mono","Roboto Mono",ui-monospace,monospace;
+}
+:root{
+  --bg:#FBFAF7; --surface:#FFFFFF; --surface-2:#F3F1EA; --surface-3:#EAE7DC;
+  --line:#E1DED2; --line-strong:#CFCBBB;
+  --ink:#1F241D; --ink-2:#5E6356; --ink-3:#8A8F80;
+  --accent:#2B4162; --accent-2:#3D5C86; --accent-ink:#FFFFFF; --accent-soft:#E5EAF1;
+  --gold:#9A7318; --gold-soft:#F4EEDD;
+  --ok:#2E7D53; --ok-soft:#E3F1E8;
+  --warn:#9E6A12; --warn-soft:#F7EEDC;
+  --bad:#A6392B; --bad-soft:#F7E6E2;
+  --om:#E06100; --wave:#0F8FB4;
+  --shadow:0 1px 2px rgba(31,36,29,.05), 0 8px 24px -16px rgba(31,36,29,.25);
+  --r:7px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121510; --surface:#1A1E17; --surface-2:#212620; --surface-3:#2A2F28;
+    --line:#333829; --line-strong:#454B3C;
+    --ink:#EFEEE3; --ink-2:#9FA492; --ink-3:#7A7F6E;
+    --accent:#8DB0D8; --accent-2:#A6C4E6; --accent-ink:#0F1520; --accent-soft:#212B38;
+    --gold:#D9AE55; --gold-soft:#2C2718;
+    --ok:#6FC195; --ok-soft:#18271F;
+    --warn:#DFAE55; --warn-soft:#2A2317;
+    --bad:#E4897A; --bad-soft:#2E1C19;
+    --om:#FF8A33; --wave:#4DC7E8;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -16px rgba(0,0,0,.8);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121510; --surface:#1A1E17; --surface-2:#212620; --surface-3:#2A2F28;
+  --line:#333829; --line-strong:#454B3C;
+  --ink:#EFEEE3; --ink-2:#9FA492; --ink-3:#7A7F6E;
+  --accent:#8DB0D8; --accent-2:#A6C4E6; --accent-ink:#0F1520; --accent-soft:#212B38;
+  --gold:#D9AE55; --gold-soft:#2C2718;
+  --ok:#6FC195; --ok-soft:#18271F;
+  --warn:#DFAE55; --warn-soft:#2A2317;
+  --bad:#E4897A; --bad-soft:#2E1C19;
+  --om:#FF8A33; --wave:#4DC7E8;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -16px rgba(0,0,0,.8);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:var(--font-body);
+  font-size:15px; line-height:1.5; -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{font-family:var(--font-display); margin:0; text-wrap:balance; letter-spacing:-.01em}
+h1{font-size:1.45rem; font-weight:700}
+h2{font-size:1.05rem; font-weight:700}
+h3{font-size:.82rem; font-weight:700; text-transform:uppercase; letter-spacing:.09em; color:var(--ink-2)}
+.num{font-family:var(--font-mono); font-variant-numeric:tabular-nums}
+button,input,select,textarea{font:inherit; color:inherit}
+:focus-visible{outline:2px solid var(--accent); outline-offset:2px; border-radius:3px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important}}
+
+/* ---------- shell ---------- */
+.app{display:grid; grid-template-columns:210px 1fr; min-height:100vh}
+.rail{
+  background:var(--surface); border-right:1px solid var(--line);
+  display:flex; flex-direction:column; position:sticky; top:0; height:100vh;
+}
+.brand{padding:16px 16px 14px; border-bottom:1px solid var(--line); display:flex; gap:10px; align-items:center}
+.mark{
+  width:36px; height:36px; flex:none; border-radius:5px; background:var(--accent); color:var(--accent-ink);
+  display:grid; place-items:center; font-family:var(--font-display); font-weight:800; font-size:.78rem; letter-spacing:.02em;
+}
+.brand b{font-family:var(--font-display); font-weight:800; font-size:.83rem; line-height:1.15; display:block; letter-spacing:.01em}
+.brand span{font-size:.68rem; color:var(--ink-3); letter-spacing:.06em; text-transform:uppercase}
+.navlist{padding:10px 8px; display:flex; flex-direction:column; gap:1px; overflow-y:auto; flex:1}
+.navlist button{
+  display:flex; align-items:center; gap:10px; width:100%; text-align:left;
+  background:none; border:0; padding:8px 10px; border-radius:var(--r); cursor:pointer;
+  color:var(--ink-2); font-size:.9rem; font-weight:500;
+}
+.navlist button:hover{background:var(--surface-2); color:var(--ink)}
+.navlist button[aria-current="true"]{background:var(--accent); color:var(--accent-ink); font-weight:600}
+.navlist svg{width:17px; height:17px; flex:none; stroke:currentColor; fill:none; stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round}
+.navlist .sep{height:1px; background:var(--line); margin:8px 10px}
+.railfoot{padding:10px; border-top:1px solid var(--line); display:flex; gap:6px}
+
+.content{min-width:0; display:flex; flex-direction:column}
+.topbar{
+  display:flex; align-items:center; gap:14px; padding:12px 22px;
+  border-bottom:1px solid var(--line); background:var(--surface); position:sticky; top:0; z-index:20;
+}
+.topbar .grow{flex:1; min-width:0}
+.topbar h1{font-size:1.15rem}
+.topbar .sub{font-size:.76rem; color:var(--ink-3)}
+.wchips{display:flex; gap:8px; flex-wrap:wrap}
+.wchip{
+  display:flex; align-items:center; gap:7px; padding:5px 10px; border:1px solid var(--line);
+  border-radius:999px; background:var(--surface-2); font-size:.74rem; white-space:nowrap;
+}
+.wchip i{width:7px; height:7px; border-radius:50%; display:block}
+.wchip b{font-family:var(--font-mono); font-variant-numeric:tabular-nums; font-weight:600; font-size:.78rem}
+main{padding:22px; max-width:1220px; width:100%}
+section[hidden]{display:none}
+
+/* ---------- pieces ---------- */
+.card{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); box-shadow:var(--shadow)}
+.card>header{padding:13px 16px; border-bottom:1px solid var(--line); display:flex; align-items:center; gap:12px; flex-wrap:wrap}
+.card>header .grow{flex:1}
+.card .body{padding:16px}
+.stack{display:flex; flex-direction:column; gap:18px}
+.row{display:flex; gap:12px; flex-wrap:wrap; align-items:flex-end}
+.cols{display:grid; gap:18px}
+@media(min-width:900px){.cols.two{grid-template-columns:1fr 1fr} .cols.side{grid-template-columns:minmax(0,1.35fr) minmax(0,1fr)}}
+
+.kpis{display:grid; gap:12px; grid-template-columns:repeat(auto-fit,minmax(178px,1fr))}
+.kpi{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:14px 15px}
+.kpi .lab{font-size:.71rem; text-transform:uppercase; letter-spacing:.08em; color:var(--ink-3); font-weight:600}
+.kpi .val{font-family:var(--font-mono); font-variant-numeric:tabular-nums; font-size:1.42rem; font-weight:600; margin-top:5px; letter-spacing:-.02em}
+.kpi .val small{font-size:.62em; color:var(--ink-3); font-weight:500; margin-left:3px}
+.kpi .foot{font-size:.75rem; color:var(--ink-2); margin-top:3px}
+
+table{width:100%; border-collapse:collapse; font-size:.87rem}
+.tablewrap{overflow-x:auto}
+th{
+  text-align:left; font-family:var(--font-display); font-weight:600; font-size:.7rem; text-transform:uppercase;
+  letter-spacing:.08em; color:var(--ink-3); padding:9px 12px; border-bottom:1px solid var(--line-strong); white-space:nowrap;
+}
+td{padding:9px 12px; border-bottom:1px solid var(--line); vertical-align:middle}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover{background:var(--surface-2)}
+td.r,th.r{text-align:right}
+td.mono{font-family:var(--font-mono); font-variant-numeric:tabular-nums; white-space:nowrap}
+.empty{padding:26px 16px; text-align:center; color:var(--ink-3); font-size:.87rem}
+
+.pill{
+  display:inline-flex; align-items:center; gap:5px; padding:2px 8px; border-radius:999px;
+  font-size:.71rem; font-weight:600; white-space:nowrap; border:1px solid transparent;
+}
+.pill.ok{background:var(--ok-soft); color:var(--ok); border-color:color-mix(in srgb,var(--ok) 30%,transparent)}
+.pill.warn{background:var(--warn-soft); color:var(--warn); border-color:color-mix(in srgb,var(--warn) 30%,transparent)}
+.pill.bad{background:var(--bad-soft); color:var(--bad); border-color:color-mix(in srgb,var(--bad) 30%,transparent)}
+.pill.neutral{background:var(--surface-2); color:var(--ink-2); border-color:var(--line)}
+.pill i{width:6px;height:6px;border-radius:50%;background:currentColor;display:block}
+
+.btn{
+  display:inline-flex; align-items:center; gap:6px; padding:8px 13px; border-radius:var(--r);
+  border:1px solid var(--line-strong); background:var(--surface); color:var(--ink);
+  font-weight:600; font-size:.85rem; cursor:pointer;
+}
+.btn:hover{background:var(--surface-2)}
+.btn.primary{background:var(--accent); border-color:var(--accent); color:var(--accent-ink)}
+.btn.primary:hover{background:var(--accent-2); border-color:var(--accent-2)}
+.btn.ghost{border-color:transparent; background:transparent; color:var(--ink-2)}
+.btn.ghost:hover{background:var(--surface-2); color:var(--ink)}
+.btn.sm{padding:4px 9px; font-size:.78rem; border-radius:5px}
+.btn.danger{color:var(--bad); border-color:color-mix(in srgb,var(--bad) 35%,transparent)}
+.btn:disabled{opacity:.45; cursor:not-allowed}
+.btn svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+label.f{display:flex; flex-direction:column; gap:4px; font-size:.73rem; font-weight:600; color:var(--ink-2); text-transform:uppercase; letter-spacing:.06em; min-width:0}
+label.f>input,label.f>select{
+  border:1px solid var(--line-strong); background:var(--bg); border-radius:5px; padding:8px 10px;
+  font-size:.9rem; font-weight:400; text-transform:none; letter-spacing:0; color:var(--ink); width:100%;
+}
+label.f>input[type=number]{font-family:var(--font-mono); font-variant-numeric:tabular-nums}
+.grid-f{display:grid; gap:11px; grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+.hint{font-size:.78rem; color:var(--ink-3)}
+
+.alertbar{display:flex; gap:9px; align-items:flex-start; padding:11px 13px; border-radius:var(--r); font-size:.85rem; border:1px solid}
+.alertbar.warn{background:var(--warn-soft); border-color:color-mix(in srgb,var(--warn) 30%,transparent); color:var(--ink)}
+.alertbar.info{background:var(--accent-soft); border-color:color-mix(in srgb,var(--accent) 25%,transparent); color:var(--ink)}
+
+/* segmented toggle */
+.seg{display:inline-flex; background:var(--surface-2); border:1px solid var(--line); border-radius:var(--r); padding:2px; gap:2px}
+.seg button{background:none; border:0; padding:5px 11px; border-radius:5px; cursor:pointer; font-size:.8rem; font-weight:600; color:var(--ink-2)}
+.seg button[aria-pressed="true"]{background:var(--surface); color:var(--ink); box-shadow:0 1px 2px rgba(0,0,0,.09)}
+
+/* chart */
+.chart{width:100%; height:190px; display:block; overflow:visible}
+.chart .bar{fill:var(--accent); transition:fill .12s}
+.chart .bar:hover{fill:var(--accent-2)}
+.chart .grid{stroke:var(--line); stroke-width:1}
+.chart text{font-family:var(--font-mono); font-size:9px; fill:var(--ink-3)}
+.hbar-row{display:grid; grid-template-columns:minmax(96px,1.1fr) minmax(0,2fr) auto; gap:10px; align-items:center; padding:6px 0; font-size:.84rem}
+.hbar-track{background:var(--surface-2); border-radius:3px; height:9px; overflow:hidden}
+.hbar-fill{display:block; background:var(--accent); height:100%; min-width:3px; border-radius:0 3px 3px 0}
+
+/* modal */
+.scrim{position:fixed; inset:0; background:rgba(20,24,18,.5); display:grid; place-items:center; padding:18px; z-index:60}
+.scrim[hidden]{display:none}
+.modal{background:var(--surface); border:1px solid var(--line); border-radius:9px; width:min(560px,100%); max-height:88vh; overflow:auto; box-shadow:0 24px 60px -20px rgba(0,0,0,.5)}
+.modal header{padding:15px 18px; border-bottom:1px solid var(--line); display:flex; align-items:center; gap:12px}
+.modal header .grow{flex:1}
+.modal .body{padding:18px}
+.modal footer{padding:13px 18px; border-top:1px solid var(--line); display:flex; gap:9px; flex-wrap:wrap; justify-content:flex-end; background:var(--surface-2)}
+
+/* toast */
+#toast{position:fixed; left:50%; bottom:26px; transform:translateX(-50%); z-index:80; display:flex; flex-direction:column; gap:8px; align-items:center; pointer-events:none}
+.toast{background:var(--ink); color:var(--bg); padding:9px 16px; border-radius:999px; font-size:.85rem; font-weight:600; box-shadow:0 8px 24px -8px rgba(0,0,0,.5)}
+
+/* receipt */
+.receipt{font-family:var(--font-mono); font-size:.8rem; background:var(--bg); border:1px dashed var(--line-strong); border-radius:5px; padding:16px}
+.receipt hr{border:0; border-top:1px dashed var(--line-strong); margin:9px 0}
+.receipt .l{display:flex; justify-content:space-between; gap:12px}
+.receipt .tot{font-weight:600; font-size:.94rem}
+
+/* mobile */
+.mobnav{display:none}
+@media(max-width:820px){
+  .app{grid-template-columns:1fr}
+  .rail{display:none}
+  main{padding:12px; padding-bottom:calc(84px + env(safe-area-inset-bottom))}
+  .topbar{padding:10px 14px; padding-top:calc(10px + env(safe-area-inset-top)); flex-wrap:wrap; gap:8px}
+  .topbar h1{font-size:1.05rem}
+  .wchips{width:100%; overflow-x:auto; flex-wrap:nowrap; padding-bottom:2px; -webkit-overflow-scrolling:touch}
+  .mobnav{
+    display:flex; position:fixed; bottom:0; left:0; right:0; z-index:50; background:var(--surface);
+    border-top:1px solid var(--line); overflow-x:auto; gap:2px;
+    padding:5px 4px calc(5px + env(safe-area-inset-bottom));
+  }
+  .mobnav button{
+    flex:1 0 auto; background:none; border:0; padding:7px 9px; border-radius:6px; cursor:pointer;
+    display:flex; flex-direction:column; align-items:center; gap:3px; font-size:.63rem; font-weight:600; color:var(--ink-2); min-width:62px;
+  }
+  .mobnav button[aria-current="true"]{background:var(--accent-soft); color:var(--accent)}
+  .mobnav svg{width:19px;height:19px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+
+  /* cibles tactiles confortables en boutique */
+  .btn{padding:11px 15px; font-size:.9rem}
+  .btn.sm{padding:7px 11px; font-size:.82rem}
+  label.f>input,label.f>select{padding:11px 12px; font-size:1rem}
+  th,td{padding:11px 12px}
+  .kpi .val{font-size:1.32rem}
+  .modal{border-radius:12px}
+  .modal footer{position:sticky; bottom:0}
+}
+/* évite le zoom automatique de Chrome Android sur les champs */
+@media(max-width:820px){ input,select,textarea{font-size:16px} }
+.narrow-only{display:none}
+@media(max-width:820px){
+  .wide-only{display:none}
+  .narrow-only{display:inline}
+  /* le panier doit tenir dans l'écran, sans défilement latéral */
+  #cartTable th,#cartTable td{padding:9px 5px}
+  #cartTable td:first-child{max-width:8.5rem; overflow-wrap:anywhere}
+  #cartTable .btn.sm{padding:6px 9px}
+}
+@media(max-width:400px){
+  #cartTable{font-size:.79rem}
+  #cartTable th{font-size:.63rem}
+  #cartTable th,#cartTable td{padding:8px 3px}
+  #cartTable td:first-child{max-width:6.2rem}
+  #cartTable .btn.sm{padding:5px 7px}
+}
+#themeBtn{display:none; font-size:1rem; line-height:1}
+@media(max-width:820px){
+  #themeBtn{display:inline-flex}
+  .card>header .hint{flex-basis:100%}        /* le titre garde toute la largeur */
+  #toast{bottom:calc(88px + env(safe-area-inset-bottom)); left:12px; right:12px; transform:none}
+  .toast{width:fit-content; max-width:100%}
+}
+
+@media print{
+  .rail,.topbar,.mobnav,.noprint,#toast{display:none!important}
+  body{background:#fff}
+  .app{display:block}
+  main{padding:0; max-width:none}
+  .card{box-shadow:none; border:0}
+  .scrim{position:static; background:none; padding:0; display:block}
+  .modal{border:0; box-shadow:none; max-height:none; width:100%}
+  .modal header,.modal footer{display:none}
+}
+
+/* premier lancement */
+#boot{position:fixed; inset:0; z-index:100; background:var(--bg); display:grid; place-items:center; padding:22px}
+#boot[hidden]{display:none}
+.bootcard{width:min(460px,100%); background:var(--surface); border:1px solid var(--line);
+  border-radius:10px; padding:26px; box-shadow:var(--shadow)}
+.bootcard .mark{width:52px; height:52px; font-size:1rem; margin-bottom:16px}
+.bootcard h2{font-size:1.2rem; margin-bottom:6px}
+.bootchoice{display:flex; flex-direction:column; gap:10px; margin-top:20px}
+.bootchoice button{text-align:left; padding:14px 16px; border-radius:8px; border:1px solid var(--line-strong);
+  background:var(--surface); cursor:pointer; display:block; width:100%}
+.bootchoice button:hover{background:var(--surface-2); border-color:var(--accent)}
+.bootchoice b{display:block; font-family:var(--font-display); font-size:.95rem; margin-bottom:2px}
+.bootchoice span{font-size:.82rem; color:var(--ink-2); line-height:1.4}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <aside class="rail">
+    <div class="brand">
+      <div class="mark">DOQ</div>
+      <div>
+        <b id="brandName">DRAME OG BU LA QUALITÉ</b>
+        <span>Gestion</span>
+      </div>
+    </div>
+    <nav class="navlist" id="nav"></nav>
+    <div class="railfoot">
+      <button class="btn ghost sm" data-action="theme" title="Changer le thème">Thème</button>
+      <button class="btn ghost sm" data-page="reglages" title="Réglages et sauvegarde">Réglages</button>
+    </div>
+  </aside>
+
+  <div class="content">
+    <header class="topbar">
+      <div class="grow">
+        <h1 id="pageTitle">Tableau de bord</h1>
+        <div class="sub" id="pageSub"></div>
+      </div>
+      <button class="btn ghost sm noprint" data-action="theme" id="themeBtn" title="Thème clair / sombre" aria-label="Changer le thème">◑</button>
+      <div class="wchips" id="wchips"></div>
+    </header>
+    <main id="main"></main>
+  </div>
+</div>
+<nav class="mobnav" id="mobnav"></nav>
+
+<div class="scrim" id="scrim" hidden><div class="modal" id="modal" role="dialog" aria-modal="true"></div></div>
+<div id="toast"></div>
+
+<div id="boot" hidden>
+  <div class="bootcard">
+    <div class="mark">DOQ</div>
+    <h2>DRAME OG BU LA QUALITÉ</h2>
+    <p class="hint" style="margin:0">Gestion boutique &amp; services financiers. Vos données restent sur ce téléphone.</p>
+    <div class="bootchoice">
+      <button data-action="boot-empty">
+        <b>Démarrer ma boutique</b>
+        <span>Base vide, avec le catalogue d'aliments bétail déjà rempli. C'est le choix pour un usage réel.</span>
+      </button>
+      <button data-action="boot-demo">
+        <b>Voir une démonstration</b>
+        <span>45 jours de ventes, achats et opérations Orange Money fictifs, pour explorer l'application avant de commencer.</span>
+      </button>
+      <button data-action="boot-import">
+        <b>Restaurer une sauvegarde</b>
+        <span>Reprendre un fichier de sauvegarde exporté depuis un autre téléphone.</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<input type="file" id="filepick" accept="application/json,.json" hidden>
+
+<script>
+"use strict";
+/* ============================ ICONS ============================ */
+const I = {
+  home:'<path d="M3 9.5 10 4l7 5.5V16a1 1 0 0 1-1 1h-3v-5H7v5H4a1 1 0 0 1-1-1z"/>',
+  sale:'<circle cx="8" cy="16" r="1.4"/><circle cx="15" cy="16" r="1.4"/><path d="M2 3h2.2l2 9.2h9.3L17 6H5.2"/>',
+  buy:'<path d="M4 7h12l-1 9H5z"/><path d="M7.5 7V5a2.5 2.5 0 0 1 5 0v2"/>',
+  stock:'<path d="M3 6.5 10 3l7 3.5v7L10 17l-7-3.5z"/><path d="M3 6.5 10 10l7-3.5M10 10v7"/>',
+  users:'<circle cx="8" cy="7" r="2.6"/><path d="M3 16c0-2.6 2.2-4.4 5-4.4s5 1.8 5 4.4"/><path d="M14 6.6a2.4 2.4 0 0 1 0 4.6M15 15.6c0-1.7-.6-2.7-1.4-3.4"/>',
+  truck:'<path d="M2 6h9v8H2z"/><path d="M11 9h3.4l2.6 2.6V14h-6z"/><circle cx="5.5" cy="15.5" r="1.4"/><circle cx="14" cy="15.5" r="1.4"/>',
+  phone:'<rect x="6" y="2" width="8" height="16" rx="1.6"/><path d="M9 15.2h2"/>',
+  cash:'<rect x="2" y="5" width="16" height="10" rx="1.5"/><circle cx="10" cy="10" r="2.4"/>',
+  chart:'<path d="M3 17V3"/><path d="M3 17h14"/><rect x="6" y="10" width="2.6" height="5"/><rect x="11" y="6" width="2.6" height="9"/>',
+};
+const ico = k => '<svg viewBox="0 0 20 20" aria-hidden="true">'+I[k]+'</svg>';
+
+I.cog = '<circle cx="10" cy="10" r="2.8"/><path d="M10 2.6v2M10 15.4v2M17.4 10h-2M4.6 10h-2M15.2 4.8l-1.4 1.4M6.2 13.8l-1.4 1.4M15.2 15.2l-1.4-1.4M6.2 6.2 4.8 4.8"/>';
+
+const PAGES = [
+  {id:'dash',    label:'Accueil',      icon:'home',  title:'Tableau de bord'},
+  {id:'sales',   label:'Ventes',       icon:'sale',  title:'Ventes'},
+  {id:'purch',   label:'Achats',       icon:'buy',   title:'Achats fournisseurs'},
+  {id:'stock',   label:'Stock',        icon:'stock', title:'Produits & stock'},
+  {sep:true},
+  {id:'clients', label:'Clients',      icon:'users', title:'Clients & dettes'},
+  {id:'four',    label:'Fournisseurs', icon:'truck', title:'Fournisseurs & dettes'},
+  {sep:true},
+  {id:'money',   label:'Orange / Wave', icon:'phone', title:'Orange Money & Wave'},
+  {id:'caisse',  label:'Caisse',       icon:'cash',  title:'Caisses & dépenses'},
+  {id:'rep',     label:'Rapports',     icon:'chart', title:'Rapports'},
+  {id:'reglages',label:'Réglages',     icon:'cog',   title:'Réglages & sauvegarde'},
+];
+
+/* ============================ UTIL ============================ */
+const F = n => new Intl.NumberFormat('fr-FR',{maximumFractionDigits:0}).format(Math.round(n||0));
+const FC = n => F(n)+' F';
+const D = iso => new Date(iso+'T00:00:00').toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit',year:'2-digit'});
+const DL = iso => new Date(iso+'T00:00:00').toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+const esc = s => String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+// date du jour selon l'heure locale du téléphone
+const todayISO = () => { const d=new Date(); return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,10); };
+let TODAY = todayISO();
+const addDays=(iso,n)=>{const d=new Date(iso+'T00:00:00'); d.setDate(d.getDate()+n); return d.toISOString().slice(0,10);};
+const METHODS = ['Espèces','Orange Money','Wave','Banque'];
+const WALLETS = ['Caisse','Orange Money','Wave','Banque'];
+const WCOLOR = {'Caisse':'var(--gold)','Orange Money':'var(--om)','Wave':'var(--wave)','Banque':'var(--accent)'};
+
+function toast(msg){
+  const t=document.createElement('div'); t.className='toast'; t.textContent=msg;
+  document.getElementById('toast').appendChild(t);
+  setTimeout(()=>t.remove(),2600);
+}
+
+/* ============================ DEMO DATA ============================ */
+function rng(seed){let a=seed>>>0;return()=>{a=(a+0x6D2B79F5)>>>0;let t=a;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return((t^t>>>14)>>>0)/4294967296;};}
+
+/* Catalogue de départ — prix indicatifs, à ajuster depuis la page Stock. */
+const CATALOGUE = [
+  ['AB-01','Aliment bétail complet','Bétail','sac 50kg',15000,18000,64,15],
+  ['SB-02','Son de blé','Bétail','sac 50kg',7000,8500,120,30],
+  ['TC-03','Tourteau de coton','Bétail','sac 50kg',12000,14500,38,20],
+  ['MC-04','Maïs concassé','Bétail','sac 50kg',9000,11000,52,15],
+  ['CM-05','CMV — complément minéral','Bétail','sac 25kg',6000,8000,26,10],
+  ['BL-06','Bloc à lécher','Bétail','unité',2500,3500,74,20],
+  ['VP-07','Aliment volaille ponte','Volaille','sac 50kg',16000,19500,31,12],
+  ['VC-08','Aliment volaille chair','Volaille','sac 50kg',17000,20500,9,12],
+  ['AP-09','Aliment poisson','Pisciculture','sac 25kg',20000,24000,14,8],
+  ['PR-10','Paille de riz','Fourrage','botte',1200,2000,180,50],
+];
+const catalogue = (withStock) => CATALOGUE.map((p,i)=>({
+  id:i+1, code:p[0], name:p[1], cat:p[2], unit:p[3], pa:p[4], pv:p[5],
+  stock: withStock ? p[6] : 0, min:p[7]
+}));
+
+const DEFAULT_SHOP = {
+  name:'DRAME OG BU LA QUALITÉ',
+  line:'Aliments bétail & volaille — Orange Money / Wave',
+  addr:'Bamako, Mali',
+  phone:'76 00 00 00',
+};
+
+/* Boutique vide : le catalogue est là, tout le reste est à saisir. */
+function emptyData(){
+  return {
+    version:1, demo:false, settings:{shop:{...DEFAULT_SHOP}},
+    products:catalogue(false), customers:[], suppliers:[],
+    sales:[], purchases:[], money:[], expenses:[], payments:[],
+    opening:{'Caisse':0,'Orange Money':0,'Wave':0,'Banque':0},
+    nextSale:0, nextPurch:0,
+  };
+}
+
+function seedData(){
+  const r = rng(20260822);
+  const pick = a => a[Math.floor(r()*a.length)];
+  const between = (a,b) => a+Math.floor(r()*(b-a+1));
+
+  const products = catalogue(true);
+
+  const customers = [
+    ['Ferme Kalaban Coro','76 21 44 08','Kalaban Coro, Bamako'],
+    ['Bakary Traoré — éleveur','66 90 12 37','Kati Koko'],
+    ['Coopérative Sikasso Lait','75 33 87 21','Sikasso'],
+    ['Boutique Sabalibougou','69 04 55 90','Sabalibougou, Bamako'],
+    ['Fatoumata Diallo','78 45 60 12','Baco Djicoroni'],
+    ['Ferme avicole de Kati','65 71 29 44','Kati Sananfara'],
+    ['Moussa Coulibaly','76 88 03 51','Ouélessébougou'],
+  ].map((c,i)=>({id:i+1,name:c[0],phone:c[1],addr:c[2]}));
+
+  const suppliers = [
+    ['HUICOMA Koulikoro','21 26 20 40','Koulikoro'],
+    ['Grands Moulins du Mali','20 22 51 30','Bamako, Sotuba'],
+    ['Provende Sahel SARL','76 12 90 33','Bamako, Faladié'],
+    ['Import Agro Ségou','21 32 14 07','Ségou'],
+  ].map((s,i)=>({id:i+1,name:s[0],phone:s[1],addr:s[2]}));
+
+  const sales=[], purchases=[], money=[], expenses=[], payments=[];
+  let sn=0, pn=0;
+
+  for(let d=45; d>=0; d--){
+    const day = addDays(TODAY,-d);
+    const dow = new Date(day+'T00:00:00').getDay();
+    const nb = dow===0 ? between(1,3) : between(3,7);
+
+    for(let k=0;k<nb;k++){
+      const nl = r()<0.35 ? 2 : 1;
+      const lines=[]; const used=new Set();
+      for(let l=0;l<nl;l++){
+        const p = pick(products);
+        if(used.has(p.id)) continue; used.add(p.id);
+        const qty = p.unit==='unité'||p.unit==='botte' ? between(2,14) : between(1,9);
+        lines.push({pid:p.id, qty, pu:p.pv});
+      }
+      const total = lines.reduce((s,l)=>s+l.qty*l.pu,0);
+      const credit = r()<0.3;
+      const cust = credit || r()<0.35 ? pick(customers).id : null;
+      let paid = total, method = 'Espèces';
+      if(credit && cust){ paid = Math.round(total*(r()<0.4?0:[0.3,0.5,0.6,0.75][between(0,3)])/500)*500; method='Crédit'; }
+      else { const x=r(); method = x<0.62?'Espèces':x<0.82?'Orange Money':x<0.95?'Wave':'Banque'; }
+      sn++;
+      sales.push({id:sn, no:'FAC-'+day.replace(/-/g,'')+'-'+String(sn).padStart(3,'0'), date:day,
+                  cid:cust, lines, total, paid, method});
+    }
+
+    // achats fournisseurs
+    if(d%6===2){
+      const sup = pick(suppliers);
+      const lines=[];
+      for(let l=0;l<between(1,3);l++){
+        const p=pick(products);
+        lines.push({pid:p.id, qty:between(20,60), pu:p.pa});
+      }
+      const total=lines.reduce((s,l)=>s+l.qty*l.pu,0);
+      const paid = r()<0.45 ? total : Math.round(total*[0.3,0.5,0.65][between(0,2)]/1000)*1000;
+      pn++;
+      purchases.push({id:pn, no:'ACH-'+String(pn).padStart(3,'0'), date:day, sid:sup.id, lines, total, paid,
+                      method: paid===total ? pick(['Espèces','Banque']) : 'Espèces'});
+    }
+
+    // mobile money
+    for(let k=0, n=between(4,11); k<n; k++){
+      const wal = r()<0.58 ? 'Orange Money' : 'Wave';
+      const op  = pick(['depot','depot','retrait','retrait','envoi','reception']);
+      const amt = [1000,2000,2500,5000,10000,15000,20000,25000,50000,75000,100000][between(0,10)];
+      const com = Math.max(100, Math.round(amt*0.012/25)*25);
+      money.push({id:money.length+1, date:day, wallet:wal, op, name:pick(['Aminata K.','Ibrahim S.','Salif D.','Oumou T.','Adama B.','Sekou M.','Djeneba C.','Client comptant']),
+                  phone:'7'+between(0,9)+' '+between(10,99)+' '+between(10,99)+' '+between(10,99), amount:amt, com,
+                  ref:'TX'+String(700000+money.length*37).slice(0,6)});
+    }
+
+    // dépenses
+    if(r()<0.42){
+      const e = pick([['Transport / manutention',between(2,9)*1000],['Carburant groupe',between(3,8)*1000],
+                      ['Salaire journalier apprenti',between(2,4)*1000],['Électricité / eau',between(5,15)*1000],
+                      ['Réparation charrette',between(3,12)*1000],['Sacherie & emballage',between(2,7)*1000]]);
+      expenses.push({id:expenses.length+1, date:day, label:e[0], amount:e[1], wallet:'Caisse'});
+    }
+
+    // règlements clients (tranches)
+    if(r()<0.5){
+      const c = pick(customers);
+      payments.push({id:payments.length+1, date:day, kind:'client', pid:c.id,
+                     amount: [5000,10000,15000,20000,25000,50000][between(0,5)], method:pick(['Espèces','Espèces','Orange Money','Wave']), note:'Tranche'});
+    }
+    // règlements fournisseurs
+    if(r()<0.22){
+      const s = pick(suppliers);
+      payments.push({id:payments.length+1, date:day, kind:'fourn', pid:s.id,
+                     amount: [25000,50000,75000,100000,150000][between(0,4)], method:pick(['Espèces','Banque','Orange Money']), note:'Tranche'});
+    }
+  }
+
+  const data = {version:1, demo:true, settings:{shop:{...DEFAULT_SHOP}},
+                products, customers, suppliers, sales, purchases, money, expenses, payments,
+                opening:{'Caisse':0,'Orange Money':0,'Wave':0,'Banque':0}, nextSale:sn, nextPurch:pn};
+  // Les soldes d'ouverture sont calés pour que la trésorerie de démonstration finisse saine
+  const cible = {'Caisse':1250000,'Orange Money':1800000,'Wave':1100000,'Banque':3400000};
+  const d = walletDeltas(data);
+  WALLETS.forEach(k=>{ data.opening[k] = Math.round((cible[k]-d[k])/500)*500; });
+  return data;
+}
+
+/* ============================ STOCKAGE ============================
+ * Dans l'application Android, les données sont écrites dans un vrai fichier
+ * du téléphone via le pont `window.Android`. Dans un navigateur, on retombe
+ * sur le stockage local. Même format des deux côtés : la sauvegarde est
+ * interchangeable entre les deux.
+ * ================================================================= */
+const KEY    = 'doq_data_v1';
+const KEY_2  = 'doq_data_secours';   // copie de la dernière version saine
+const NATIF  = typeof window.Android !== 'undefined' && window.Android;
+
+const Store = {
+  read(){
+    try{
+      if(NATIF && NATIF.load) return NATIF.load() || '';
+      return localStorage.getItem(KEY) || '';
+    }catch(e){ return ''; }
+  },
+  /* La copie de secours vit toujours dans le navigateur, y compris dans
+     l'application Android : si le fichier principal devient illisible, il
+     reste de quoi repartir. */
+  readSecours(){
+    try{ return localStorage.getItem(KEY_2) || ''; }catch(e){ return ''; }
+  },
+  write(txt){
+    let ok = true;
+    try{
+      if(NATIF && NATIF.save) NATIF.save(txt);
+      else localStorage.setItem(KEY, txt);
+    }catch(e){
+      ok = false;
+      toast("Enregistrement impossible — mémoire pleine ?");
+    }
+    if(ok){ try{ localStorage.setItem(KEY_2, txt); }catch(e){} }
+    return ok;
+  },
+  clear(){
+    try{
+      if(NATIF && NATIF.save){ NATIF.save(''); }
+      else localStorage.removeItem(KEY);
+    }catch(e){}
+    try{ localStorage.removeItem(KEY_2); }catch(e){}
+  },
+};
+
+let S = null;
+
+function lisible(raw){
+  if(!raw) return null;
+  try{
+    const d = JSON.parse(raw);
+    return (d && Array.isArray(d.products)) ? d : null;
+  }catch(e){ return null; }
+}
+
+function load(){
+  let d = lisible(Store.read());
+  if(d){ S = migrate(d); return true; }
+
+  // Le fichier principal est vide ou abîmé : on tente la copie de secours.
+  d = lisible(Store.readSecours());
+  if(d){
+    S = migrate(d);
+    save();                                   // on rétablit le fichier principal
+    setTimeout(()=>toast('Données récupérées depuis la copie de secours'), 600);
+    return true;
+  }
+  return false;
+}
+
+/* Complète les données venues d'une version antérieure. */
+function migrate(d){
+  d.version  ??= 2;
+  d.settings ??= {};
+  d.settings.shop = {...DEFAULT_SHOP, ...(d.settings.shop||{})};
+  d.opening  ??= {'Caisse':0,'Orange Money':0,'Wave':0,'Banque':0};
+  WALLETS.forEach(w=>{ d.opening[w] = +(d.opening[w]||0); });
+  ['products','customers','suppliers','sales','purchases','money','expenses','payments']
+    .forEach(k=>{ if(!Array.isArray(d[k])) d[k]=[]; });
+
+  // v2 : annulation possible, remise, et coût figé au moment de la vente
+  const pa = id => (d.products.find(p=>p.id===id)?.pa) || 0;
+  d.sales.forEach(s=>{
+    s.annule ??= false;
+    s.remise ??= 0;
+    (s.lines||[]).forEach(l=>{ l.pc ??= l.pu; l.pa ??= pa(l.pid); });
+  });
+  d.purchases.forEach(p=>{ p.annule ??= false; });
+  ['money','expenses','payments'].forEach(k=>{ d[k].forEach(x=>{ x.annule ??= false; }); });
+  d.version = 2;
+
+  d.nextSale  ??= d.sales.length;
+  d.nextPurch ??= d.purchases.length;
+  return d;
+}
+
+/* Un enregistrement annulé reste visible dans les journaux — c'est la trace de
+   l'erreur — mais il ne compte plus dans aucun calcul. */
+const vivant  = x => !x.annule;
+const ventes  = () => S.sales.filter(vivant);
+const achats  = () => S.purchases.filter(vivant);
+
+function save(){ Store.write(JSON.stringify(S)); }
+
+function startWith(data){
+  S = migrate(data);
+  save();
+  document.getElementById('boot').hidden = true;
+  page = 'dash';
+  render();
+}
+
+/* Impression : le navigateur sait le faire, l'application Android passe par le
+   service d'impression du téléphone (Bluetooth, Wi-Fi, ou export PDF). */
+function imprimer(){
+  if(NATIF && NATIF.imprimer){ NATIF.imprimer(); return; }
+  try{ window.print(); }catch(e){ toast('Impression indisponible sur cet écran'); }
+}
+
+/* ---------- sauvegarde : export / import ---------- */
+function backupName(){
+  return 'sauvegarde-drame-og-' + TODAY.replace(/-/g,'') + '.json';
+}
+
+/* Suivi des sauvegardes : l'application se charge d'y penser à votre place. */
+function noterSauvegarde(){
+  S.derniereSauvegarde = TODAY;
+  save();
+  render();
+}
+function joursDepuisSauvegarde(){
+  if(!S.derniereSauvegarde) return null;
+  const d = Math.round((new Date(TODAY) - new Date(S.derniereSauvegarde)) / 86400000);
+  return isNaN(d) ? null : Math.max(0, d);
+}
+/* À partir de quand faut-il insister : jamais sauvegardé alors qu'il y a du travail
+   enregistré, ou plus d'une semaine sans sauvegarde. */
+function sauvegardeARappeler(){
+  if(S.demo) return false;
+  const travail = ventes().length + achats().length + S.money.filter(vivant).length;
+  if(travail === 0) return false;
+  const j = joursDepuisSauvegarde();
+  return j === null || j >= 7;
+}
+
+function exportBackup(){
+  const txt = JSON.stringify(S, null, 1);
+  if(NATIF && NATIF.saveBackup){
+    const res = NATIF.saveBackup(backupName(), txt);
+    if(res) noterSauvegarde();
+    toast(res ? 'Sauvegarde écrite dans Téléchargements' : 'Écriture impossible');
+    return;
+  }
+  try{
+    const url = URL.createObjectURL(new Blob([txt], {type:'application/json'}));
+    const a = document.createElement('a');
+    a.href = url; a.download = backupName();
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url), 4000);
+    noterSauvegarde();
+    toast('Sauvegarde téléchargée');
+  }catch(e){ toast('Téléchargement impossible sur cet écran'); }
+}
+
+function importBackup(){
+  if(NATIF && NATIF.pickBackup){ NATIF.pickBackup(); return; }  // la réponse revient par recevoirSauvegarde()
+  document.getElementById('filepick').click();
+}
+
+/* Appelée par le sélecteur de fichier du navigateur ET par l'application Android. */
+window.recevoirSauvegarde = function(txt){
+  let d;
+  try{ d = JSON.parse(txt); }catch(e){ toast('Fichier illisible — ce n’est pas une sauvegarde'); return; }
+  if(!d || !Array.isArray(d.products)){ toast('Fichier non reconnu'); return; }
+  const n = (d.sales||[]).length;
+  S = migrate(d); save();
+  document.getElementById('boot').hidden = true;
+  render();
+  toast('Sauvegarde restaurée — ' + n + ' vente' + (n>1?'s':''));
+};
+
+document.getElementById('filepick').addEventListener('change', function(){
+  const f = this.files && this.files[0];
+  if(!f) return;
+  const r = new FileReader();
+  r.onload = () => window.recevoirSauvegarde(String(r.result||''));
+  r.onerror = () => toast('Lecture du fichier impossible');
+  r.readAsText(f);
+  this.value = '';
+});
+
+/* ============================ DERIVATIONS ============================ */
+const prod = id => S.products.find(p=>p.id===id);
+const cust = id => S.customers.find(c=>c.id===id);
+const supp = id => S.suppliers.find(s=>s.id===id);
+
+// Mouvements de trésorerie générés par toutes les opérations enregistrées
+function walletDeltas(d){
+  const w={'Caisse':0,'Orange Money':0,'Wave':0,'Banque':0};
+  const add=(k,v)=>{ k = (k==='Crédit'?'Caisse':k==='Espèces'?'Caisse':k); if(k in w) w[k]+=v; };
+  // les opérations annulées ne bougent plus aucune caisse
+  d = {sales:d.sales.filter(vivant), purchases:d.purchases.filter(vivant),
+       payments:d.payments.filter(vivant), expenses:d.expenses.filter(vivant),
+       money:d.money.filter(vivant)};
+  d.sales.forEach(s=>{ if(s.paid>0) add(s.method, s.paid); });
+  d.purchases.forEach(p=>{ if(p.paid>0) add(p.method, -p.paid); });
+  d.payments.forEach(p=>{ add(p.method, p.kind==='client'? p.amount : -p.amount); });
+  d.expenses.forEach(e=>{ add(e.wallet, -e.amount); });
+  d.money.forEach(m=>{
+    const entree = m.op==='depot' || m.op==='envoi';   // le client remet de l'argent liquide
+    add('Caisse', (entree? m.amount : -m.amount) + m.com);
+    add(m.wallet, entree? -m.amount : m.amount);        // la flotte varie en sens inverse
+  });
+  return w;
+}
+// Solde courant de chaque caisse = ouverture + mouvements
+function wallets(){
+  const d=walletDeltas(S), w={};
+  WALLETS.forEach(k=>{ w[k]=(S.opening[k]||0)+d[k]; });
+  return w;
+}
+// Mouvements d'une seule journée
+function walletDay(date){
+  const f=a=>a.filter(x=>x.date===date);
+  return walletDeltas({sales:f(S.sales), purchases:f(S.purchases), payments:f(S.payments),
+                       expenses:f(S.expenses), money:f(S.money)});
+}
+
+// Dette d'un client / fournisseur + affectation FIFO des tranches
+function ledger(kind, id){
+  const docs = (kind==='client'
+      ? ventes().filter(s=>s.cid===id).map(s=>({ref:s.no,date:s.date,total:s.total,paid:s.paid,obj:s}))
+      : achats().filter(p=>p.sid===id).map(p=>({ref:p.no,date:p.date,total:p.total,paid:p.paid,obj:p})))
+    .sort((a,b)=>a.date.localeCompare(b.date));
+  let pot = S.payments.filter(p=>vivant(p) && p.kind===kind && p.pid===id).reduce((s,p)=>s+p.amount,0);
+  const rows = docs.map(d=>{
+    let rest = d.total - d.paid;
+    const applied = Math.min(pot, rest); pot -= applied; rest -= applied;
+    return {...d, regle:d.paid+applied, reste:rest};
+  });
+  const debt = rows.reduce((s,r)=>s+r.reste,0) - pot; // pot restant = avoir
+  return {rows, debt:Math.max(0,debt), avoir:Math.max(0,-debt)};
+}
+const debtOf = (kind,id) => ledger(kind,id).debt;
+const totalDebt = kind => (kind==='client'?S.customers:S.suppliers).reduce((s,x)=>s+debtOf(kind,x.id),0);
+
+/* Le coût est figé au moment de la vente : changer le prix d'achat d'un produit
+   aujourd'hui ne doit pas réécrire la marge des ventes d'hier. */
+const coutLigne = l => l.qty * (l.pa != null ? l.pa : (prod(l.pid)?.pa||0));
+const saleCost  = s => s.lines.reduce((t,l)=>t+coutLigne(l),0);
+const remiseVente = s => (s.remise||0) + s.lines.reduce((t,l)=>t+Math.max(0,((l.pc??l.pu)-l.pu))*l.qty,0);
+const inRange = (d,a,b) => d>=a && d<=b;
+
+function stats(a,b){
+  const sa = ventes().filter(s=>inRange(s.date,a,b));
+  const ca = sa.reduce((t,s)=>t+s.total,0);
+  const cost = sa.reduce((t,s)=>t+saleCost(s),0);
+  const mo = S.money.filter(m=>vivant(m) && inRange(m.date,a,b));
+  const ex = S.expenses.filter(e=>vivant(e) && inRange(e.date,a,b)).reduce((t,e)=>t+e.amount,0);
+  const com = mo.reduce((t,m)=>t+m.com,0);
+  const rem = sa.reduce((t,s)=>t+remiseVente(s),0);
+  return {sales:sa, ca, cost, marge:ca-cost, com, moneyVol:mo.reduce((t,m)=>t+m.amount,0),
+          nbTx:mo.length, exp:ex, remise:rem, resultat:(ca-cost)+com-ex, nb:sa.length};
+}
+function stockValue(){ return S.products.reduce((t,p)=>t+p.stock*p.pa,0); }
+function lowStock(){ return S.products.filter(p=>p.stock<=p.min); }
+// boutique qui n'a encore rien enregistré : on guide au lieu d'alerter
+function debutant(){ return !S.demo && ventes().length===0 && achats().length===0; }
+// quantité lisible : 12 et non 12,00
+const qte = v => Number.isInteger(+v) ? String(+v) : String(+(+v).toFixed(2)).replace('.',',');
+
+/* ============================ CHART ============================ */
+function barChart(series,{h=190}={}){
+  const w=560, pad={t:14,r:6,b:22,l:44};
+  const iw=w-pad.l-pad.r, ih=h-pad.t-pad.b;
+  const max=Math.max(1,...series.map(d=>d.v));
+  const step=iw/series.length, bw=Math.max(3,Math.min(26,step*0.62));
+  const ticks=[0,max/2,max];
+  let g='';
+  ticks.forEach(t=>{
+    const y=pad.t+ih-(t/max)*ih;
+    g+=`<line class="grid" x1="${pad.l}" y1="${y.toFixed(1)}" x2="${w-pad.r}" y2="${y.toFixed(1)}"/>`;
+    g+=`<text x="${pad.l-6}" y="${(y+3).toFixed(1)}" text-anchor="end">${t>=1000?Math.round(t/1000)+'k':Math.round(t)}</text>`;
+  });
+  let bars='';
+  series.forEach((d,i)=>{
+    const bh=Math.max(d.v>0?2:0,(d.v/max)*ih);
+    const x=pad.l+i*step+(step-bw)/2, y=pad.t+ih-bh;
+    bars+=`<rect class="bar" x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${bw.toFixed(1)}" height="${bh.toFixed(1)}" rx="3"><title>${esc(d.label)} — ${FC(d.v)}</title></rect>`;
+    if(series.length<=16 || i%2===0)
+      bars+=`<text x="${(x+bw/2).toFixed(1)}" y="${h-7}" text-anchor="middle">${esc(d.short)}</text>`;
+  });
+  return `<svg class="chart" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" role="img" aria-label="Chiffre d'affaires par jour">${g}${bars}
+    <line class="grid" x1="${pad.l}" y1="${pad.t+ih}" x2="${w-pad.r}" y2="${pad.t+ih}"/></svg>`;
+}
+function hbars(rows){
+  const max=Math.max(1,...rows.map(r=>r.v));
+  return rows.map(r=>`<div class="hbar-row"><span>${esc(r.label)}</span>
+    <span class="hbar-track"><span class="hbar-fill" style="width:${(r.v/max*100).toFixed(1)}%"></span></span>
+    <span class="num" style="font-size:.82rem">${FC(r.v)}</span></div>`).join('');
+}
+
+/* ============================ MODAL ============================ */
+let modalOnSubmit=null;
+function openModal(title, bodyHTML, {submit='Valider', onSubmit=null, wide=false, hideFooter=false, extra='', cancel='Annuler'}={}){
+  modalOnSubmit=onSubmit;
+  document.getElementById('modal').innerHTML = `
+    <header><h2 class="grow">${esc(title)}</h2><button class="btn ghost sm" data-action="close-modal">Fermer</button></header>
+    <div class="body">${bodyHTML}</div>
+    ${hideFooter?'':`<footer>${extra}<button class="btn" data-action="close-modal">${esc(cancel)}</button><button class="btn primary" data-action="modal-submit">${esc(submit)}</button></footer>`}`;
+  document.getElementById('modal').style.width = wide?'min(760px,100%)':'min(560px,100%)';
+  document.getElementById('scrim').hidden=false;
+  const f=document.querySelector('#modal input,#modal select'); if(f) setTimeout(()=>f.focus(),40);
+}
+function closeModal(){ document.getElementById('scrim').hidden=true; modalOnSubmit=null; }
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeModal(); });
+
+/* ============================ NAV ============================ */
+let page='dash';
+function buildNav(){
+  const nav=document.getElementById('nav'), mob=document.getElementById('mobnav');
+  nav.innerHTML = PAGES.map(p=>p.sep?'<span class="sep"></span>'
+    :`<button data-page="${p.id}" aria-current="${p.id===page}">${ico(p.icon)}<span>${p.label}</span></button>`).join('');
+  mob.innerHTML = PAGES.filter(p=>!p.sep).map(p=>
+    `<button data-page="${p.id}" aria-current="${p.id===page}">${ico(p.icon)}<span>${p.label}</span></button>`).join('');
+}
+
+/* ============================ VIEWS ============================ */
+function view_dash(){
+  const t=stats(TODAY,TODAY), m=stats(addDays(TODAY,-29),TODAY);
+  const w=wallets(), low=lowStock();
+  const days=[]; for(let i=13;i>=0;i--){const d=addDays(TODAY,-i);
+    days.push({label:DL(d), short:new Date(d+'T00:00:00').toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit'}),
+               v:ventes().filter(s=>s.date===d).reduce((x,s)=>x+s.total,0)});}
+  const top={}; m.sales.forEach(s=>s.lines.forEach(l=>{top[l.pid]=(top[l.pid]||0)+l.qty*l.pu;}));
+  const topRows=Object.entries(top).sort((a,b)=>b[1]-a[1]).slice(0,6).map(([id,v])=>({label:prod(+id)?.name||'—',v}));
+  const recent=[...S.sales].sort((a,b)=>b.date.localeCompare(a.date)||b.id-a.id).slice(0,7);
+
+  return `
+  <div class="stack">
+    <div class="kpis">
+      <div class="kpi"><div class="lab">Ventes du jour</div><div class="val">${F(t.ca)}<small>F</small></div><div class="foot">${t.nb} vente${t.nb>1?'s':''} enregistrée${t.nb>1?'s':''}</div></div>
+      <div class="kpi"><div class="lab">Commissions du jour</div><div class="val">${F(t.com)}<small>F</small></div><div class="foot">${t.nbTx} opération${t.nbTx>1?'s':''} Orange / Wave</div></div>
+      <div class="kpi"><div class="lab">Dettes clients</div><div class="val" style="color:var(--bad)">${F(totalDebt('client'))}<small>F</small></div><div class="foot">à recouvrer</div></div>
+      <div class="kpi"><div class="lab">Dettes fournisseurs</div><div class="val" style="color:var(--warn)">${F(totalDebt('fourn'))}<small>F</small></div><div class="foot">à régler</div></div>
+      <div class="kpi"><div class="lab">Valeur du stock</div><div class="val">${F(stockValue())}<small>F</small></div><div class="foot">${S.products.length} références</div></div>
+    </div>
+
+    ${(() => {
+      const w = wallets();
+      const negatives = WALLETS.filter(k => w[k] < 0);
+      const ouvertureVide = WALLETS.every(k => !S.opening[k]);
+      if(!negatives.length || S.demo) return '';
+      return `<div class="alertbar ${ouvertureVide?'info':'warn'}"><span>
+        <b>${negatives.join(' et ')} ${negatives.length>1?'sont négatives':'est négative'}.</b>
+        ${ouvertureVide
+          ? `C'est normal si vous n'avez pas encore dit ce que vous aviez en caisse au départ :
+             l'application part de zéro. Renseignez vos soldes d'ouverture dans les Réglages.`
+          : `Vérifiez vos saisies : une sortie a peut-être été enregistrée deux fois.`}
+        <button class="btn sm" data-page="reglages" style="margin-left:6px">Réglages</button></span></div>`;
+    })()}
+
+    ${sauvegardeARappeler() ? `
+      <div class="alertbar warn">
+        <span><b>${joursDepuisSauvegarde()===null
+          ? 'Vous n’avez jamais fait de sauvegarde.'
+          : 'Dernière sauvegarde il y a '+joursDepuisSauvegarde()+' jours.'}</b>
+          Vos données ne sont que sur ce téléphone. S’il est perdu, volé ou cassé, tout part avec lui.
+          <button class="btn sm primary" data-page="reglages" style="margin-left:6px">Sauvegarder</button></span>
+      </div>` : ''}
+
+    ${debutant() ? `
+      <div class="card">
+        <header><h2 class="grow">Pour démarrer</h2></header>
+        <div class="body">
+          <ol style="margin:0; padding-left:20px; line-height:1.9">
+            <li><b>Entrez votre stock</b> — page <b>Achats</b> : chaque livraison reçue augmente le stock et, si vous ne payez pas tout, crée la dette envers le fournisseur.</li>
+            <li><b>Notez ce que vous avez en caisse</b> — page <b>Réglages</b>, « Soldes d'ouverture » : espèces, flotte Orange Money, flotte Wave, banque.</li>
+            <li><b>Vendez</b> — page <b>Ventes</b> : ajoutez les articles, choisissez le client si c'est à crédit, et la facture s'imprime.</li>
+          </ol>
+          <p class="hint" style="margin:14px 0 0">Les prix du catalogue sont indicatifs : ajustez-les sur la page Stock avant votre première vente.</p>
+        </div>
+      </div>`
+    : low.length ? `<div class="alertbar warn"><b>Stock bas —</b> <span>${
+        low.slice(0,4).map(p=>esc(p.name)+' ('+qte(p.stock)+' '+esc(p.unit)+')').join(' · ')
+      }${low.length>4?' · et '+(low.length-4)+' autre'+(low.length-4>1?'s':''):''}. Pensez à commander chez vos fournisseurs.</span></div>`
+    : ''}
+
+    <div class="cols side">
+      <div class="card">
+        <header><h2 class="grow">Chiffre d'affaires — 14 derniers jours</h2>
+          <span class="hint num">Total ${FC(days.reduce((s,d)=>s+d.v,0))}</span></header>
+        <div class="body">${barChart(days)}</div>
+      </div>
+      <div class="card">
+        <header><h2>Produits les plus vendus (30 j)</h2></header>
+        <div class="body">${topRows.length?hbars(topRows):'<div class="empty">Aucune vente</div>'}</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <header><h2 class="grow">Dernières ventes</h2>
+        <button class="btn sm" data-page="sales">Tout voir</button></header>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Facture</th><th>Date</th><th>Client</th><th class="r">Total</th><th class="r">Payé</th><th>État</th><th></th></tr></thead>
+        <tbody>${recent.map(s=>saleRow(s)).join('')}</tbody>
+      </table></div>
+    </div>
+  </div>`;
+}
+
+function etatVente(s){
+  if(s.annule) return '<span class="pill neutral"><i></i>Annulée</span>';
+  const reste=s.total-s.paid;
+  return reste<=0 ? '<span class="pill ok"><i></i>Soldée</span>'
+       : s.paid>0 ? '<span class="pill warn"><i></i>Partielle</span>'
+       : '<span class="pill bad"><i></i>Impayée</span>';
+}
+function saleRow(s){
+  return `<tr${s.annule?' style="opacity:.55"':''}><td class="mono" style="font-size:.8rem">${esc(s.no)}</td><td class="mono">${D(s.date)}</td>
+    <td>${s.cid?esc(cust(s.cid)?.name||'—'):'<span class="hint">Client comptant</span>'}</td>
+    <td class="r mono"${s.annule?' style="text-decoration:line-through"':''}>${FC(s.total)}</td>
+    <td class="r mono">${FC(s.annule?0:s.paid)}</td><td>${etatVente(s)}</td>
+    <td class="r noprint"><button class="btn sm ghost" data-action="invoice" data-id="${s.id}">Facture</button></td></tr>`;
+}
+
+/* ---------- VENTES ---------- */
+let cart=[];
+function view_sales(){
+  const t=stats(TODAY,TODAY);
+  const list=[...S.sales].sort((a,b)=>b.date.localeCompare(a.date)||b.id-a.id).slice(0,40);
+  return `
+  <div class="stack">
+    <div class="kpis">
+      <div class="kpi"><div class="lab">Encaissé aujourd'hui</div><div class="val">${F(t.sales.reduce((s,x)=>s+x.paid,0))}<small>F</small></div></div>
+      <div class="kpi"><div class="lab">Facturé aujourd'hui</div><div class="val">${F(t.ca)}<small>F</small></div></div>
+      <div class="kpi"><div class="lab">Marge brute du jour</div><div class="val" style="color:var(--ok)">${F(t.marge)}<small>F</small></div></div>
+    </div>
+
+    <div class="card">
+      <header><h2 class="grow">Nouvelle vente</h2><span class="hint">Ajoutez les articles puis validez</span></header>
+      <div class="body stack">
+        <div class="grid-f">
+          <label class="f">Produit
+            <select id="v_prod">${S.products.map(p=>`<option value="${p.id}">${esc(p.name)} — stock ${qte(p.stock)} ${esc(p.unit)}</option>`).join('')}</select></label>
+          <label class="f">Quantité<input id="v_qty" type="number" min="0.01" step="0.01" value="1"></label>
+          <label class="f">Prix négocié<input id="v_pu" type="number" min="0" step="25" value="${S.products[0].pv}"></label>
+          <div style="display:flex;align-items:flex-end"><button class="btn primary" data-action="cart-add" style="width:100%">Ajouter</button></div>
+        </div>
+        <div id="v_marge" class="hint"></div>
+
+        <div class="tablewrap"><table id="cartTable">
+          <thead><tr><th>Article</th><th class="r">Qté</th><th class="r">P.U.</th><th class="r">Montant</th><th></th></tr></thead>
+          <tbody>${cartRows()}</tbody>
+        </table></div>
+
+        ${cart.length?`
+        <div class="grid-f">
+          <label class="f">Remise sur le total
+            <input id="v_rem" type="number" min="0" step="100" value="${remiseGlobale}"></label>
+          <div style="display:flex;align-items:flex-end"><button class="btn" data-action="apply-remise" style="width:100%">Appliquer</button></div>
+          <div style="display:flex;align-items:flex-end;grid-column:span 2">
+            <span class="hint">Le « geste commercial » que vous faites au client sur l'ensemble du panier.</span></div>
+        </div>`:''}
+
+        <div class="grid-f">
+          <label class="f">Client
+            <select id="v_cid"><option value="">Client comptant</option>${S.customers.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join('')}</select></label>
+          <label class="f">Mode de paiement
+            <select id="v_met">${METHODS.map(m=>`<option>${m}</option>`).join('')}<option>Crédit</option></select></label>
+          <label class="f">Montant payé<input id="v_paid" type="number" min="0" step="25" value="${cartNet()}"></label>
+          <div style="display:flex;align-items:flex-end;gap:9px">
+            <button class="btn primary" data-action="sale-validate" style="flex:1" ${cart.length?'':'disabled'}>Valider la vente</button>
+            ${cart.length?'<button class="btn ghost" data-action="cart-clear">Vider</button>':''}
+          </div>
+        </div>
+        ${cart.length?bandeauPanier():`<div class="hint">Si le montant payé est inférieur au total, le reste devient une dette du client, réglable ensuite par tranches.</div>`}
+      </div>
+    </div>
+
+    <div class="card">
+      <header><h2 class="grow">Historique des ventes</h2><span class="hint">40 dernières</span></header>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Facture</th><th>Date</th><th>Client</th><th>Paiement</th><th class="r">Total</th><th class="r">Payé</th><th>État</th><th></th></tr></thead>
+        <tbody>${list.map(s=>
+          `<tr${s.annule?' style="opacity:.55"':''}><td class="mono" style="font-size:.8rem">${esc(s.no)}</td><td class="mono">${D(s.date)}</td>
+            <td>${s.cid?esc(cust(s.cid)?.name||'—'):'<span class="hint">Comptant</span>'}</td>
+            <td><span class="pill neutral">${esc(s.method)}</span></td>
+            <td class="r mono"${s.annule?' style="text-decoration:line-through"':''}>${FC(s.total)}</td>
+            <td class="r mono">${FC(s.annule?0:s.paid)}</td><td>${etatVente(s)}</td>
+            <td class="r noprint"><button class="btn sm ghost" data-action="invoice" data-id="${s.id}">${s.annule?'Voir':'Facture'}</button></td></tr>`
+        ).join('')}</tbody>
+      </table></div>
+    </div>
+  </div>`;
+}
+let remiseGlobale = 0;
+const cartTotal  = () => cart.reduce((s,l)=>s+l.qty*l.pu,0);          // après prix négocié
+const cartNet    = () => Math.max(0, cartTotal() - remiseGlobale);    // après geste commercial
+const cartCout   = () => cart.reduce((s,l)=>s+l.qty*(l.pa??0),0);
+const cartMarge  = () => cartNet() - cartCout();
+const cartRemise = () => remiseGlobale + cart.reduce((s,l)=>s+Math.max(0,(l.pc-l.pu))*l.qty,0);
+
+function cartRows(){
+  if(!cart.length) return '<tr><td colspan="5" class="empty">Panier vide — ajoutez un premier article.</td></tr>';
+  const lignes = cart.map((l,i)=>{
+    const rem = (l.pc-l.pu)*l.qty;
+    const mg  = l.qty*(l.pu-(l.pa??0));
+    const detail =
+      (rem>0 ? `<span style="color:var(--warn)">remise ${F(rem)} F</span> · ` :
+       rem<0 ? `<span>au-dessus du catalogue de ${F(-rem)} F</span> · ` : '')
+      + `marge <span style="color:${mg<0?'var(--bad)':'var(--ok)'}">${mg<0?'−':'+'}${F(Math.abs(mg))} F</span>`;
+    return `<tr><td><b>${esc(prod(l.pid)?.name||'')}</b><br><span class="hint">${detail}</span></td>
+      <td class="r mono">${qte(l.qty)}</td>
+      <td class="r mono">${FC(l.pu)}${l.pu!==l.pc?`<br><span class="hint wide-only" style="text-decoration:line-through">${FC(l.pc)}</span>`:''}</td>
+      <td class="r mono"><b>${FC(l.qty*l.pu)}</b></td>
+      <td class="r"><button class="btn sm ghost danger" data-action="cart-del" data-i="${i}" aria-label="Retirer"><span class="wide-only">Retirer</span><span class="narrow-only">✕</span></button></td></tr>`;
+  }).join('');
+  const pied = remiseGlobale>0
+    ? `<tr><td colspan="3" class="r hint">Sous-total</td><td class="r mono hint">${FC(cartTotal())}</td><td></td></tr>
+       <tr><td colspan="3" class="r hint">Remise sur le total</td><td class="r mono" style="color:var(--warn)">−${F(remiseGlobale)} F</td><td></td></tr>`
+    : '';
+  return lignes + pied +
+    `<tr><td colspan="3" class="r"><b>Total à payer</b></td>
+      <td class="r mono"><b style="font-size:1.05rem">${FC(cartNet())}</b></td><td></td></tr>`;
+}
+
+/* Bandeau sous le panier : le vendeur doit voir sa marge avant de valider,
+   pas la découvrir dans le rapport du mois. */
+function bandeauPanier(){
+  const m = cartMarge(), r = cartRemise(), net = cartNet();
+  const taux = net>0 ? Math.round(m/net*100) : 0;
+  if(m < 0) return `<div class="alertbar bad"><span><b>Vente à perte —</b>
+    vous perdez <b>${FC(-m)}</b> sur ce panier (coût d'achat ${FC(cartCout())}).
+    Ajustez le prix, ou validez quand même si c'est voulu.</span></div>`;
+  return `<div class="alertbar ${taux<8?'warn':'info'}"><span>
+    Total <b>${FC(net)}</b>${r>0?` · remise accordée <b>${FC(r)}</b>`:''} ·
+    marge <b>${FC(m)}</b> (${taux} %)${taux<8?" — c'est mince.":''}</span></div>`;
+}
+
+/* ---------- ACHATS ---------- */
+let pcart=[];
+function view_purch(){
+  const list=[...S.purchases].sort((a,b)=>b.date.localeCompare(a.date)||b.id-a.id).slice(0,25);
+  return `
+  <div class="stack">
+    <div class="alertbar info"><span>Un achat augmente le stock. Si vous ne payez qu'une partie, le solde devient une <b>dette fournisseur</b> que vous réglez ensuite par tranches depuis l'onglet Fournisseurs.</span></div>
+
+    <div class="card">
+      <header><h2 class="grow">Nouvel achat</h2></header>
+      <div class="body stack">
+        <div class="grid-f">
+          <label class="f">Produit
+            <select id="a_prod">${S.products.map(p=>`<option value="${p.id}">${esc(p.name)}</option>`).join('')}</select></label>
+          <label class="f">Quantité<input id="a_qty" type="number" min="0.01" step="0.01" value="10"></label>
+          <label class="f">Prix d'achat unitaire<input id="a_pu" type="number" min="0" step="25" value="${S.products[0].pa}"></label>
+          <div style="display:flex;align-items:flex-end"><button class="btn primary" data-action="pcart-add" style="width:100%">Ajouter</button></div>
+        </div>
+        <div class="tablewrap"><table>
+          <thead><tr><th>Article</th><th class="r">Qté</th><th class="r">P.U.</th><th class="r">Montant</th><th></th></tr></thead>
+          <tbody>${pcartRows()}</tbody>
+        </table></div>
+        <div class="grid-f">
+          <label class="f">Fournisseur
+            <select id="a_sid">${S.suppliers.map(s=>`<option value="${s.id}">${esc(s.name)}</option>`).join('')}</select></label>
+          <label class="f">Mode de paiement<select id="a_met">${METHODS.map(m=>`<option>${m}</option>`).join('')}</select></label>
+          <label class="f">Montant payé<input id="a_paid" type="number" min="0" step="100" value="${pcartTotal()}"></label>
+          <div style="display:flex;align-items:flex-end;gap:9px">
+            <button class="btn primary" data-action="purch-validate" style="flex:1" ${pcart.length?'':'disabled'}>Enregistrer l'achat</button>
+            ${pcart.length?'<button class="btn ghost" data-action="pcart-clear">Vider</button>':''}
+          </div>
+        </div>
+        <div class="hint">Total achat <b class="num">${FC(pcartTotal())}</b></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <header><h2 class="grow">Historique des achats</h2></header>
+      <div class="tablewrap"><table>
+        <thead><tr><th>N°</th><th>Date</th><th>Fournisseur</th><th>Articles</th><th class="r">Total</th><th class="r">Payé</th><th class="r">Reste</th><th></th></tr></thead>
+        <tbody>${list.map(p=>{
+          const reste=p.total-p.paid;
+          return `<tr${p.annule?' style="opacity:.55"':''}><td class="mono" style="font-size:.8rem">${esc(p.no)}</td><td class="mono">${D(p.date)}</td>
+          <td>${esc(supp(p.sid)?.name||'—')}</td>
+          <td class="hint">${p.lines.map(l=>esc(prod(l.pid)?.name||'')+' ×'+qte(l.qty)).join(', ')}</td>
+          <td class="r mono"${p.annule?' style="text-decoration:line-through"':''}>${FC(p.total)}</td>
+          <td class="r mono">${FC(p.annule?0:p.paid)}</td>
+          <td class="r mono">${p.annule?'<span class="pill neutral"><i></i>Annulé</span>'
+            :reste>0?`<span style="color:var(--warn);font-weight:600">${FC(reste)}</span>`:'<span class="pill ok"><i></i>Soldé</span>'}</td>
+          <td class="r noprint">${p.annule?'':`<button class="btn sm ghost danger" data-action="cancel-purchase" data-id="${p.id}">Annuler</button>`}</td></tr>`;
+        }).join('')}</tbody>
+      </table></div>
+    </div>
+  </div>`;
+}
+const pcartTotal=()=>pcart.reduce((s,l)=>s+l.qty*l.pu,0);
+function pcartRows(){
+  if(!pcart.length) return '<tr><td colspan="5" class="empty">Aucun article.</td></tr>';
+  return pcart.map((l,i)=>`<tr><td>${esc(prod(l.pid)?.name||'')}</td><td class="r mono">${l.qty}</td>
+    <td class="r mono">${FC(l.pu)}</td><td class="r mono"><b>${FC(l.qty*l.pu)}</b></td>
+    <td class="r"><button class="btn sm ghost danger" data-action="pcart-del" data-i="${i}" aria-label="Retirer"><span class="wide-only">Retirer</span><span class="narrow-only">✕</span></button></td></tr>`).join('');
+}
+
+/* ---------- STOCK ---------- */
+function view_stock(){
+  const rows=[...S.products].sort((a,b)=>a.name.localeCompare(b.name));
+  return `
+  <div class="stack">
+    <div class="kpis">
+      <div class="kpi"><div class="lab">Valeur du stock</div><div class="val">${F(stockValue())}<small>F</small></div><div class="foot">au prix d'achat</div></div>
+      <div class="kpi"><div class="lab">Références</div><div class="val">${S.products.length}</div></div>
+      <div class="kpi"><div class="lab">Alertes stock bas</div><div class="val" style="color:${lowStock().length?'var(--bad)':'var(--ok)'}">${lowStock().length}</div><div class="foot">sous le seuil minimum</div></div>
+    </div>
+    <div class="card">
+      <header><h2 class="grow">Produits</h2><button class="btn primary sm" data-action="prod-new">+ Nouveau produit</button></header>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Code</th><th>Produit</th><th>Catégorie</th><th class="r">Stock</th><th class="r">Seuil</th><th class="r">Prix achat</th><th class="r">Prix vente</th><th class="r">Marge</th><th>État</th><th></th></tr></thead>
+        <tbody>${rows.map(p=>{
+          const st = p.stock<=0?'<span class="pill bad"><i></i>Rupture</span>'
+                   : p.stock<=p.min?'<span class="pill warn"><i></i>Bas</span>'
+                   : '<span class="pill ok"><i></i>OK</span>';
+          const mg = p.pv-p.pa;
+          return `<tr><td class="mono" style="font-size:.8rem">${esc(p.code)}</td><td><b>${esc(p.name)}</b><br><span class="hint">${esc(p.unit)}</span></td>
+            <td class="hint">${esc(p.cat)}</td><td class="r mono"><b>${p.stock}</b></td><td class="r mono hint">${p.min}</td>
+            <td class="r mono">${FC(p.pa)}</td><td class="r mono">${FC(p.pv)}</td>
+            <td class="r mono" style="color:var(--ok)">+${F(mg)} <span class="hint">(${Math.round(mg/p.pa*100)}%)</span></td>
+            <td>${st}</td>
+            <td class="r noprint"><button class="btn sm ghost" data-action="prod-edit" data-id="${p.id}">Modifier</button></td></tr>`;
+        }).join('')}</tbody>
+      </table></div>
+    </div>
+  </div>`;
+}
+
+/* ---------- CLIENTS / FOURNISSEURS ---------- */
+function view_parties(kind){
+  const list = kind==='client'?S.customers:S.suppliers;
+  const rows = list.map(x=>({x, l:ledger(kind,x.id)})).sort((a,b)=>b.l.debt-a.l.debt);
+  const tot = rows.reduce((s,r)=>s+r.l.debt,0);
+  const label = kind==='client'?'client':'fournisseur';
+  return `
+  <div class="stack">
+    <div class="kpis">
+      <div class="kpi"><div class="lab">${kind==='client'?'Total à recouvrer':'Total à régler'}</div>
+        <div class="val" style="color:${kind==='client'?'var(--bad)':'var(--warn)'}">${F(tot)}<small>F</small></div></div>
+      <div class="kpi"><div class="lab">${kind==='client'?'Clients':'Fournisseurs'}</div><div class="val">${list.length}</div>
+        <div class="foot">${rows.filter(r=>r.l.debt>0).length} avec dette</div></div>
+    </div>
+    <div class="card">
+      <header><h2 class="grow">${kind==='client'?'Clients':'Fournisseurs'}</h2>
+        <button class="btn primary sm" data-action="party-new" data-kind="${kind}">+ Nouveau ${label}</button></header>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Nom</th><th>Téléphone</th><th>Adresse</th><th class="r">${kind==='client'?'Doit':'Dû'}</th><th>État</th><th></th></tr></thead>
+        <tbody>${rows.map(({x,l})=>`<tr>
+          <td><b>${esc(x.name)}</b></td><td class="mono" style="font-size:.82rem">${esc(x.phone)}</td>
+          <td class="hint">${esc(x.addr)}</td>
+          <td class="r mono"><b style="color:${l.debt>0?(kind==='client'?'var(--bad)':'var(--warn)'):'var(--ink-3)'}">${FC(l.debt)}</b>
+            ${l.avoir>0?`<br><span class="hint">avoir ${FC(l.avoir)}</span>`:''}</td>
+          <td>${l.debt>0?'<span class="pill warn"><i></i>En cours</span>':'<span class="pill ok"><i></i>À jour</span>'}</td>
+          <td class="r noprint" style="white-space:nowrap">
+            <button class="btn sm ghost" data-action="party-hist" data-kind="${kind}" data-id="${x.id}">Compte</button>
+            <button class="btn sm ${l.debt>0?'primary':''}" data-action="pay-new" data-kind="${kind}" data-id="${x.id}">${kind==='client'?'Encaisser':'Payer'}</button>
+          </td></tr>`).join('')}</tbody>
+      </table></div>
+    </div>
+    <div class="card">
+      <header><h2 class="grow">Derniers règlements</h2></header>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Date</th><th>${kind==='client'?'Client':'Fournisseur'}</th><th class="r">Montant</th><th>Mode</th><th>Note</th><th></th></tr></thead>
+        <tbody>${S.payments.filter(p=>p.kind===kind).sort((a,b)=>b.date.localeCompare(a.date)||b.id-a.id).slice(0,15)
+          .map(p=>`<tr${p.annule?' style="opacity:.55"':''}><td class="mono">${D(p.date)}</td>
+            <td>${esc((kind==='client'?cust(p.pid):supp(p.pid))?.name||'—')}</td>
+            <td class="r mono"${p.annule?' style="text-decoration:line-through"':''}><b>${FC(p.amount)}</b></td>
+            <td><span class="pill neutral">${esc(p.method)}</span></td>
+            <td class="hint">${esc(p.note||'')}${p.annule?' <span class="pill neutral"><i></i>Annulé</span>':''}</td>
+            <td class="r noprint">${p.annule?'':`<button class="btn sm ghost danger" data-action="cancel-payment" data-id="${p.id}">Annuler</button>`}</td></tr>`).join('')
+            || '<tr><td colspan="6" class="empty">Aucun règlement</td></tr>'}</tbody>
+      </table></div>
+    </div>
+  </div>`;
+}
+
+/* ---------- MOBILE MONEY ---------- */
+const OPS={depot:'Dépôt client',retrait:'Retrait client',envoi:'Envoi d\'argent',reception:'Réception d\'argent'};
+function view_money(){
+  const w=wallets();
+  const today=S.money.filter(m=>vivant(m) && m.date===TODAY);
+  const m30=S.money.filter(m=>vivant(m) && m.date>=addDays(TODAY,-29));
+  const list=[...S.money].sort((a,b)=>b.date.localeCompare(a.date)||b.id-a.id).slice(0,30);
+  return `
+  <div class="stack">
+    <div class="kpis">
+      <div class="kpi"><div class="lab">Flotte Orange Money</div><div class="val" style="color:var(--om)">${F(w['Orange Money'])}<small>F</small></div></div>
+      <div class="kpi"><div class="lab">Flotte Wave</div><div class="val" style="color:var(--wave)">${F(w['Wave'])}<small>F</small></div></div>
+      <div class="kpi"><div class="lab">Commissions du jour</div><div class="val" style="color:var(--ok)">${F(today.reduce((s,m)=>s+m.com,0))}<small>F</small></div><div class="foot">${today.length} opérations</div></div>
+      <div class="kpi"><div class="lab">Commissions 30 jours</div><div class="val">${F(m30.reduce((s,m)=>s+m.com,0))}<small>F</small></div><div class="foot">volume ${F(m30.reduce((s,m)=>s+m.amount,0))} F</div></div>
+    </div>
+
+    <div class="alertbar info"><span><b>Sens des opérations —</b> un <b>dépôt</b> ou un <b>envoi</b> fait entrer du liquide en caisse et diminue la flotte ; un <b>retrait</b> ou une <b>réception</b> fait sortir du liquide et recharge la flotte. La commission est toujours un gain en caisse.</span></div>
+
+    <div class="card">
+      <header><h2 class="grow">Nouvelle opération</h2></header>
+      <div class="body stack">
+        <div class="grid-f">
+          <label class="f">Opérateur<select id="m_wal"><option>Orange Money</option><option>Wave</option></select></label>
+          <label class="f">Opération<select id="m_op">${Object.entries(OPS).map(([k,v])=>`<option value="${k}">${v}</option>`).join('')}</select></label>
+          <label class="f">Nom du client<input id="m_name" placeholder="Ex. Aminata K."></label>
+          <label class="f">Téléphone<input id="m_phone" placeholder="76 00 00 00"></label>
+          <label class="f">Montant<input id="m_amt" type="number" min="0" step="500" value="10000"></label>
+          <label class="f">Commission<input id="m_com" type="number" min="0" step="25" value="125"></label>
+          <label class="f">Référence<input id="m_ref" placeholder="TX000000"></label>
+          <div style="display:flex;align-items:flex-end"><button class="btn primary" data-action="money-add" style="width:100%">Enregistrer</button></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <header><h2 class="grow">Journal des opérations</h2><span class="hint">30 dernières</span></header>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Date</th><th>Opérateur</th><th>Opération</th><th>Client</th><th class="r">Montant</th><th class="r">Commission</th><th>Réf.</th><th></th></tr></thead>
+        <tbody>${list.map(m=>`<tr${m.annule?' style="opacity:.55"':''}><td class="mono">${D(m.date)}</td>
+          <td><span class="pill neutral"><i style="background:${WCOLOR[m.wallet]}"></i>${esc(m.wallet)}</span></td>
+          <td>${esc(OPS[m.op]||m.op)}${m.annule?'<br><span class="pill neutral"><i></i>Annulée</span>':''}</td>
+          <td>${esc(m.name)}<br><span class="hint mono">${esc(m.phone)}</span></td>
+          <td class="r mono"${m.annule?' style="text-decoration:line-through"':''}>${FC(m.amount)}</td>
+          <td class="r mono" style="color:${m.annule?'var(--ink-3)':'var(--ok)'}">+${F(m.com)} F</td>
+          <td class="mono hint" style="font-size:.78rem">${esc(m.ref)}</td>
+          <td class="r noprint">${m.annule?'':`<button class="btn sm ghost danger" data-action="cancel-money" data-id="${m.id}">Annuler</button>`}</td></tr>`).join('')}</tbody>
+      </table></div>
+    </div>
+  </div>`;
+}
+
+/* ---------- CAISSE ---------- */
+function view_caisse(){
+  const w=wallets(), dj=walletDay(TODAY);
+  const ex=[...S.expenses].sort((a,b)=>b.date.localeCompare(a.date)||b.id-a.id).slice(0,20);
+  const ex30=S.expenses.filter(e=>vivant(e) && e.date>=addDays(TODAY,-29)).reduce((s,e)=>s+e.amount,0);
+  return `
+  <div class="stack">
+    <div class="kpis">
+      ${WALLETS.map(k=>`<div class="kpi"><div class="lab"><span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:${WCOLOR[k]};margin-right:6px"></span>${k}</div>
+        <div class="val" style="color:${w[k]<0?'var(--bad)':'var(--ink)'}">${F(w[k])}<small>F</small></div>
+        <div class="foot">aujourd'hui <b style="color:${dj[k]>=0?'var(--ok)':'var(--bad)'}">${dj[k]>=0?'+':'−'}${F(Math.abs(dj[k]))} F</b></div></div>`).join('')}
+      <div class="kpi"><div class="lab">Total disponible</div><div class="val" style="color:var(--accent)">${F(WALLETS.reduce((s,k)=>s+w[k],0))}<small>F</small></div></div>
+    </div>
+
+    <div class="cols two">
+      <div class="card">
+        <header><h2 class="grow">Nouvelle dépense</h2></header>
+        <div class="body grid-f">
+          <label class="f" style="grid-column:1/-1">Libellé<input id="e_lab" placeholder="Ex. Transport / manutention"></label>
+          <label class="f">Montant<input id="e_amt" type="number" min="0" step="500" value="5000"></label>
+          <label class="f">Payée depuis<select id="e_wal">${WALLETS.map(k=>`<option>${k}</option>`).join('')}</select></label>
+          <div style="display:flex;align-items:flex-end"><button class="btn primary" data-action="exp-add" style="width:100%">Enregistrer</button></div>
+        </div>
+      </div>
+      <div class="card">
+        <header><h2 class="grow">Transfert entre caisses</h2></header>
+        <div class="body grid-f">
+          <label class="f">De<select id="t_from">${WALLETS.map(k=>`<option>${k}</option>`).join('')}</select></label>
+          <label class="f">Vers<select id="t_to">${WALLETS.map((k,i)=>`<option ${i===1?'selected':''}>${k}</option>`).join('')}</select></label>
+          <label class="f">Montant<input id="t_amt" type="number" min="0" step="1000" value="50000"></label>
+          <div style="display:flex;align-items:flex-end"><button class="btn primary" data-action="transfer" style="width:100%">Transférer</button></div>
+          <p class="hint" style="grid-column:1/-1;margin:0">Sert à recharger la flotte Orange/Wave depuis la caisse ou la banque.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <header><h2 class="grow">Dépenses</h2><span class="hint">30 jours : <b class="num">${FC(ex30)}</b></span></header>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Date</th><th>Libellé</th><th>Caisse</th><th class="r">Montant</th><th></th></tr></thead>
+        <tbody>${ex.map(e=>`<tr${e.annule?' style="opacity:.55"':''}><td class="mono">${D(e.date)}</td>
+          <td>${esc(e.label)}${e.annule?' <span class="pill neutral"><i></i>Annulée</span>':''}</td>
+          <td><span class="pill neutral"><i style="background:${WCOLOR[e.wallet]||'var(--ink-3)'}"></i>${esc(e.wallet)}</span></td>
+          <td class="r mono" style="color:${e.annule?'var(--ink-3)':'var(--bad)'}${e.annule?';text-decoration:line-through':''}">−${F(e.amount)} F</td>
+          <td class="r noprint">${e.annule?'':`<button class="btn sm ghost danger" data-action="cancel-expense" data-id="${e.id}">Annuler</button>`}</td></tr>`).join('')
+          || '<tr><td colspan="5" class="empty">Aucune dépense</td></tr>'}</tbody>
+      </table></div>
+    </div>
+  </div>`;
+}
+
+/* ---------- RAPPORTS ---------- */
+let repRange=30;
+function view_rep(){
+  const a=addDays(TODAY,-(repRange-1)), b=TODAY;
+  const st=stats(a,b);
+  const w=wallets();
+  const byMethod={}; st.sales.forEach(s=>{ byMethod[s.method]=(byMethod[s.method]||0)+s.total; });
+  const byProd={}; st.sales.forEach(s=>s.lines.forEach(l=>{
+    const k=l.pid; byProd[k]=byProd[k]||{q:0,ca:0,mg:0};
+    byProd[k].q+=l.qty; byProd[k].ca+=l.qty*l.pu; byProd[k].mg+=l.qty*(l.pu-(prod(l.pid)?.pa||0));
+  }));
+  const prodRows=Object.entries(byProd).sort((x,y)=>y[1].ca-x[1].ca);
+  const n=Math.min(repRange,30); const days=[];
+  for(let i=n-1;i>=0;i--){const d=addDays(TODAY,-i);
+    days.push({label:DL(d), short:new Date(d+'T00:00:00').toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit'}),
+               v:ventes().filter(s=>s.date===d).reduce((x,s)=>x+s.total,0)});}
+
+  return `
+  <div class="stack">
+    <div class="row noprint" style="align-items:center">
+      <div class="seg">
+        ${[7,30,45].map(r=>`<button data-action="range" data-r="${r}" aria-pressed="${repRange===r}">${r} jours</button>`).join('')}
+      </div>
+      <div class="grow"></div>
+      <button class="btn" data-action="print">Imprimer / PDF</button>
+    </div>
+
+    <div class="card">
+      <header><h2 class="grow">Compte d'exploitation — ${D(a)} au ${D(b)}</h2></header>
+      <div class="body">
+        <div class="tablewrap"><table>
+          <tbody>
+            <tr><td>Chiffre d'affaires marchandises</td><td class="r mono"><b>${FC(st.ca)}</b></td></tr>
+            ${st.remise>0?`<tr><td class="hint" style="padding-left:26px">dont remises accordées aux clients</td>
+              <td class="r mono hint">−${F(st.remise)} F</td></tr>`:''}
+            <tr><td class="hint" style="padding-left:26px">Coût d'achat des marchandises vendues</td><td class="r mono hint">−${F(st.cost)} F</td></tr>
+            <tr><td><b>Marge brute</b></td><td class="r mono"><b style="color:var(--ok)">${FC(st.marge)}</b></td></tr>
+            <tr><td>Commissions Orange Money / Wave</td><td class="r mono">+${F(st.com)} F</td></tr>
+            <tr><td>Dépenses de fonctionnement</td><td class="r mono" style="color:var(--bad)">−${F(st.exp)} F</td></tr>
+            <tr><td style="font-size:1.02rem"><b>Résultat de la période</b></td>
+                <td class="r mono" style="font-size:1.08rem"><b style="color:${st.resultat>=0?'var(--ok)':'var(--bad)'}">${FC(st.resultat)}</b></td></tr>
+          </tbody>
+        </table></div>
+      </div>
+    </div>
+
+    <div class="kpis">
+      <div class="kpi"><div class="lab">Ventes enregistrées</div><div class="val">${st.nb}</div><div class="foot">panier moyen ${F(st.nb?st.ca/st.nb:0)} F</div></div>
+      <div class="kpi"><div class="lab">Taux de marge</div><div class="val">${st.ca?Math.round(st.marge/st.ca*100):0}<small>%</small></div></div>
+      <div class="kpi"><div class="lab">Volume mobile money</div><div class="val">${F(st.moneyVol)}<small>F</small></div><div class="foot">${st.nbTx} opérations</div></div>
+      <div class="kpi"><div class="lab">Trésorerie totale</div><div class="val">${F(WALLETS.reduce((s,k)=>s+w[k],0))}<small>F</small></div></div>
+      <div class="kpi"><div class="lab">Créances clients</div><div class="val" style="color:var(--bad)">${F(totalDebt('client'))}<small>F</small></div></div>
+    </div>
+
+    <div class="card">
+      <header><h2 class="grow">Ventes par jour</h2></header>
+      <div class="body">${barChart(days,{h:210})}</div>
+    </div>
+
+    <div class="cols side">
+      <div class="card">
+        <header><h2 class="grow">Détail par produit</h2></header>
+        <div class="tablewrap"><table>
+          <thead><tr><th>Produit</th><th class="r">Qté vendue</th><th class="r">CA</th><th class="r">Marge</th></tr></thead>
+          <tbody>${prodRows.map(([id,v])=>`<tr><td>${esc(prod(+id)?.name||'—')}</td>
+            <td class="r mono">${Math.round(v.q)}</td><td class="r mono">${FC(v.ca)}</td>
+            <td class="r mono" style="color:var(--ok)">${FC(v.mg)}</td></tr>`).join('')
+            || '<tr><td colspan="4" class="empty">Aucune vente sur la période</td></tr>'}</tbody>
+        </table></div>
+      </div>
+      <div class="card">
+        <header><h2 class="grow">Répartition des encaissements</h2></header>
+        <div class="body">${Object.keys(byMethod).length?hbars(Object.entries(byMethod).sort((a,b)=>b[1]-a[1]).map(([k,v])=>({label:k,v}))):'<div class="empty">—</div>'}</div>
+      </div>
+    </div>
+  </div>`;
+}
+
+/* ---------- RÉGLAGES ---------- */
+function view_reglages(){
+  const sh = S.settings.shop, w = wallets();
+  const poids = new Blob([JSON.stringify(S)]).size;
+  const compte = k => (S[k]||[]).length;
+  return `
+  <div class="stack">
+    ${S.demo ? `<div class="alertbar warn"><span><b>Vous êtes en démonstration.</b>
+      Ces chiffres sont fictifs. Quand vous serez prêt à travailler pour de vrai, choisissez
+      « Repartir sur une boutique vide » plus bas.</span></div>` : ''}
+
+    <div class="card">
+      <header><h2 class="grow">Identité de la boutique</h2><span class="hint">Apparaît sur les factures</span></header>
+      <div class="body">
+        <div class="grid-f">
+          <label class="f" style="grid-column:1/-1">Nom<input id="s_name" value="${esc(sh.name)}"></label>
+          <label class="f" style="grid-column:1/-1">Activité<input id="s_line" value="${esc(sh.line)}"></label>
+          <label class="f">Adresse<input id="s_addr" value="${esc(sh.addr)}"></label>
+          <label class="f">Téléphone<input id="s_phone" value="${esc(sh.phone)}"></label>
+        </div>
+        <div style="margin-top:12px"><button class="btn primary" data-action="save-shop">Enregistrer</button></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <header><h2 class="grow">Soldes d'ouverture</h2><span class="hint">Ce que vous aviez en main au démarrage</span></header>
+      <div class="body">
+        <p class="hint" style="margin:0 0 12px">Saisissez ici l'argent présent dans chaque caisse le jour où vous commencez
+          à utiliser l'application. Tout le reste se calcule ensuite tout seul à partir de vos opérations.</p>
+        <div class="grid-f">
+          ${WALLETS.map(k=>`<label class="f">${k}
+            <input id="o_${k.replace(/\s/g,'')}" type="number" step="500" value="${S.opening[k]||0}"></label>`).join('')}
+        </div>
+        <div style="margin-top:12px"><button class="btn primary" data-action="save-opening">Enregistrer</button></div>
+        <div class="tablewrap" style="margin-top:16px"><table>
+          <thead><tr><th>Caisse</th><th class="r">Ouverture</th><th class="r">Mouvements</th><th class="r">Solde actuel</th></tr></thead>
+          <tbody>${WALLETS.map(k=>`<tr><td>${k}</td>
+            <td class="r mono">${FC(S.opening[k]||0)}</td>
+            <td class="r mono">${FC(w[k]-(S.opening[k]||0))}</td>
+            <td class="r mono"><b>${FC(w[k])}</b></td></tr>`).join('')}</tbody>
+        </table></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <header><h2 class="grow">Sauvegarde</h2></header>
+      <div class="body">
+        ${(() => {
+          const j = joursDepuisSauvegarde();
+          if(j === null) return `<div class="alertbar warn" style="margin-bottom:12px"><span>
+            <b>Aucune sauvegarde faite.</b> Faites-en une aujourd'hui, puis chaque fin de semaine.</span></div>`;
+          if(j >= 7) return `<div class="alertbar warn" style="margin-bottom:12px"><span>
+            <b>Dernière sauvegarde il y a ${j} jour${j>1?'s':''}</b> (${D(S.derniereSauvegarde)}). Il est temps d'en refaire une.</span></div>`;
+          return `<div class="alertbar ok" style="margin-bottom:12px"><span>
+            Dernière sauvegarde ${j===0?"aujourd'hui":(j===1?'hier':'il y a '+j+' jours')} — ${D(S.derniereSauvegarde)}.</span></div>`;
+        })()}
+
+        <p class="hint" style="margin:0 0 12px">
+          ${NATIF
+            ? `Vos données sont écrites dans un fichier interne de l'application. Elles survivent aux
+               mises à jour de l'application, mais <b>pas à sa désinstallation</b>.`
+            : `Vous utilisez l'application dans un navigateur : les données sont dans la mémoire du
+               navigateur. Vider l'historique, changer de navigateur ou de téléphone les efface.
+               <b>Pour votre vrai travail, installez l'application.</b>`}
+          Exportez une sauvegarde chaque fin de semaine et gardez le fichier ailleurs — envoyé sur
+          votre propre WhatsApp, par e-mail, ou copié sur une clé USB.</p>
+        <div class="row">
+          <button class="btn primary" data-action="export">Exporter un fichier</button>
+          <button class="btn" data-action="import">Restaurer un fichier</button>
+        </div>
+        <p class="hint" style="margin:14px 0 8px">Si l'enregistrement de fichier n'est pas possible là où vous êtes
+          — sur certains navigateurs, par exemple — passez par le texte : copiez la sauvegarde et
+          envoyez-la-vous par message, puis collez-la sur l'autre téléphone.</p>
+        <div class="row">
+          <button class="btn" data-action="copy-backup">Copier la sauvegarde</button>
+          <button class="btn" data-action="paste-backup">Coller une sauvegarde</button>
+        </div>
+        <div class="tablewrap" style="margin-top:16px"><table>
+          <thead><tr><th>Contenu</th><th class="r">Enregistrements</th></tr></thead>
+          <tbody>
+            <tr><td>Produits</td><td class="r mono">${compte('products')}</td></tr>
+            <tr><td>Clients</td><td class="r mono">${compte('customers')}</td></tr>
+            <tr><td>Fournisseurs</td><td class="r mono">${compte('suppliers')}</td></tr>
+            <tr><td>Ventes</td><td class="r mono">${compte('sales')}</td></tr>
+            <tr><td>Achats</td><td class="r mono">${compte('purchases')}</td></tr>
+            <tr><td>Règlements</td><td class="r mono">${compte('payments')}</td></tr>
+            <tr><td>Opérations Orange / Wave</td><td class="r mono">${compte('money')}</td></tr>
+            <tr><td>Dépenses</td><td class="r mono">${compte('expenses')}</td></tr>
+            <tr><td class="hint">Taille du fichier</td><td class="r mono hint">${(poids/1024).toFixed(0)} Ko</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <header><h2 class="grow">Recommencer</h2></header>
+      <div class="body">
+        <p class="hint" style="margin:0 0 12px">Ces actions effacent définitivement ce qui est enregistré sur ce téléphone.
+          Exportez une sauvegarde avant.</p>
+        <div class="row">
+          <button class="btn danger" data-action="reset-empty">Repartir sur une boutique vide</button>
+          <button class="btn ghost" data-action="reset-demo">Recharger la démonstration</button>
+        </div>
+      </div>
+    </div>
+
+    <p class="hint" style="text-align:center">
+      ${esc(sh.name)} · version 1.0 · ${NATIF ? 'application Android' : 'application web'}
+    </p>
+  </div>`;
+}
+
+/* ============================ RENDER ============================ */
+const VIEWS={dash:view_dash, sales:view_sales, purch:view_purch, stock:view_stock,
+  clients:()=>view_parties('client'), four:()=>view_parties('fourn'),
+  money:view_money, caisse:view_caisse, rep:view_rep, reglages:view_reglages};
+
+function render(){
+  if(!S) return;
+  TODAY = todayISO();
+  const p=PAGES.find(x=>x.id===page) || PAGES[0];
+  document.getElementById('pageTitle').textContent=p.title;
+  document.getElementById('pageSub').textContent =
+    page==='dash' ? DL(TODAY).replace(/^./,c=>c.toUpperCase())
+                  : (S.demo ? 'Données de démonstration' : S.settings.shop.name);
+  const brand=document.getElementById('brandName');
+  if(brand) brand.textContent=S.settings.shop.name;
+  const w=wallets();
+  document.getElementById('wchips').innerHTML = WALLETS.map(k=>
+    `<span class="wchip"><i style="background:${WCOLOR[k]}"></i>${k}<b>${F(w[k])} F</b></span>`).join('');
+  document.getElementById('main').innerHTML = VIEWS[page]();
+  buildNav();
+  if(page==='sales') margeEnDirect();
+  window.scrollTo({top:0,behavior:'instant'});
+}
+
+/* ============================ ACTIONS ============================ */
+const val = id => { const el=document.getElementById(id); return el?el.value:''; };
+const num = id => { const v=parseFloat(val(id)); return isNaN(v)?0:v; };
+
+document.addEventListener('click', e=>{
+  const nb=e.target.closest('[data-page]');
+  if(nb){ page=nb.dataset.page; render(); return; }
+  const b=e.target.closest('[data-action]');
+  if(!b) return;
+  const a=b.dataset.action;
+
+  if(a==='close-modal') return closeModal();
+  if(a==='modal-submit'){ if(modalOnSubmit && modalOnSubmit()===false) return; return; }
+  if(a==='theme'){
+    const cur=document.documentElement.getAttribute('data-theme');
+    const next = cur==='dark'?'light':cur==='light'?'dark':(matchMedia('(prefers-color-scheme: dark)').matches?'light':'dark');
+    document.documentElement.setAttribute('data-theme',next);
+    try{localStorage.setItem('doq_theme',next);}catch(err){}
+    return;
+  }
+  if(a==='print'){ imprimer(); return; }
+  if(a==='range'){ repRange=+b.dataset.r; render(); return; }
+
+  /* --- premier lancement --- */
+  if(a==='boot-empty'){ startWith(emptyData()); toast('Boutique créée — bonne vente !'); return; }
+  if(a==='boot-demo'){ startWith(seedData()); toast('Démonstration chargée'); return; }
+  if(a==='boot-import'){ importBackup(); return; }
+
+  /* --- réglages --- */
+  if(a==='save-shop'){
+    S.settings.shop = {
+      name: val('s_name').trim() || DEFAULT_SHOP.name,
+      line: val('s_line').trim(),
+      addr: val('s_addr').trim(),
+      phone: val('s_phone').trim(),
+    };
+    save(); render(); toast('Identité enregistrée'); return;
+  }
+  if(a==='save-opening'){
+    WALLETS.forEach(k=>{ S.opening[k] = num('o_'+k.replace(/\s/g,'')); });
+    save(); render(); toast("Soldes d'ouverture enregistrés"); return;
+  }
+  if(a==='export'){ exportBackup(); return; }
+  if(a==='import'){ importBackup(); return; }
+  if(a==='copy-backup') return copierSauvegarde();
+  if(a==='paste-backup') return collerSauvegarde();
+  if(a==='reset-empty') return confirmer(
+    'Repartir sur une boutique vide',
+    'Tout ce qui est enregistré sur ce téléphone sera effacé : ventes, achats, clients, dettes, opérations. Le catalogue de produits est conservé. Cette action est définitive.',
+    'Effacer et recommencer',
+    ()=>{ startWith(emptyData()); toast('Nouvelle boutique créée'); });
+  if(a==='reset-demo') return confirmer(
+    'Recharger la démonstration',
+    'Vos données réelles seront remplacées par 45 jours d’opérations fictives. Cette action est définitive.',
+    'Recharger la démonstration',
+    ()=>{ startWith(seedData()); toast('Démonstration rechargée'); });
+
+  /* --- panier vente --- */
+  if(a==='cart-add'){
+    const pid=+val('v_prod'), qty=num('v_qty'), pu=num('v_pu'), p=prod(pid);
+    if(!p||qty<=0) return toast('Quantité invalide');
+    if(pu<0) return toast('Prix invalide');
+    const already=cart.filter(l=>l.pid===pid).reduce((s,l)=>s+l.qty,0);
+    if(already+qty>p.stock) return toast(`Stock insuffisant : ${qte(p.stock)} ${p.unit} disponible(s)`);
+    // pc = prix du catalogue, pa = coût d'achat : tous deux figés au moment de la vente
+    cart.push({pid, qty, pu, pc:p.pv, pa:p.pa});
+    render(); toast('Article ajouté'); return;
+  }
+  if(a==='cart-del'){ cart.splice(+b.dataset.i,1); if(!cart.length) remiseGlobale=0; render(); return; }
+  if(a==='cart-clear'){ cart=[]; remiseGlobale=0; render(); return; }
+  if(a==='apply-remise'){
+    const r=Math.max(0,num('v_rem'));
+    if(r>cartTotal()) return toast('La remise dépasse le total du panier');
+    remiseGlobale=r; render(); return;
+  }
+  if(a==='sale-validate'){
+    if(!cart.length) return;
+    const total=cartNet(), paid=Math.min(num('v_paid'),total), cid=val('v_cid')?+val('v_cid'):null, met=val('v_met');
+    if(paid<total && !cid) return toast('Une vente à crédit exige un client identifié');
+    for(const l of cart){ const p=prod(l.pid); if(l.qty>p.stock) return toast('Stock insuffisant : '+p.name); }
+
+    const finaliser = () => {
+      cart.forEach(l=>{ prod(l.pid).stock=+(prod(l.pid).stock-l.qty).toFixed(2); });
+      S.nextSale++;
+      const s={id:S.nextSale, no:'FAC-'+TODAY.replace(/-/g,'')+'-'+String(S.nextSale).padStart(3,'0'),
+               date:TODAY, cid, lines:cart.slice(), total, paid, remise:remiseGlobale,
+               method: paid<total?'Crédit':met, annule:false};
+      S.sales.push(s); cart=[]; remiseGlobale=0; save(); render();
+      toast('Vente enregistrée — '+FC(total));
+      showInvoice(s.id);
+    };
+
+    // vendre en dessous du prix d'achat arrive (déstockage, arrangement) mais
+    // ne doit jamais se faire sans que le vendeur l'ait vu.
+    if(cartMarge() < 0){
+      const perte = -cartMarge();
+      return confirmer('Vente à perte',
+        'Ce panier est vendu ' + FC(perte) + ' en dessous de son coût d’achat. Enregistrer quand même ?',
+        'Enregistrer la vente', finaliser);
+    }
+    finaliser();
+    return;
+  }
+
+  /* --- panier achat --- */
+  if(a==='pcart-add'){
+    const pid=+val('a_prod'), qty=num('a_qty'), pu=num('a_pu');
+    if(!prod(pid)||qty<=0) return toast('Quantité invalide');
+    pcart.push({pid,qty,pu}); render(); return;
+  }
+  if(a==='pcart-del'){ pcart.splice(+b.dataset.i,1); render(); return; }
+  if(a==='pcart-clear'){ pcart=[]; render(); return; }
+  if(a==='purch-validate'){
+    if(!pcart.length) return;
+    const total=pcartTotal(), paid=Math.min(num('a_paid'),total), sid=+val('a_sid');
+    pcart.forEach(l=>{ const p=prod(l.pid); p.stock=+(p.stock+l.qty).toFixed(2); p.pa=l.pu; });
+    S.nextPurch++;
+    S.purchases.push({id:S.nextPurch, no:'ACH-'+String(S.nextPurch).padStart(3,'0'), date:TODAY, sid,
+                      lines:pcart.slice(), total, paid, method:val('a_met')});
+    pcart=[]; save(); render();
+    toast(paid<total?`Achat enregistré — dette de ${FC(total-paid)}`:'Achat enregistré et payé');
+    return;
+  }
+
+  /* --- mobile money --- */
+  if(a==='money-add'){
+    const amt=num('m_amt');
+    if(amt<=0) return toast('Montant invalide');
+    S.money.push({id:S.money.length+1, date:TODAY, wallet:val('m_wal'), op:val('m_op'),
+      name:val('m_name')||'Client comptant', phone:val('m_phone')||'—', amount:amt, com:num('m_com'),
+      ref:val('m_ref')||('TX'+String(Math.floor(100000+Math.random()*899999)))});
+    save(); render(); toast('Opération enregistrée');
+    return;
+  }
+
+  /* --- dépenses / transferts --- */
+  if(a==='exp-add'){
+    const amt=num('e_amt'), lab=val('e_lab').trim();
+    if(!lab) return toast('Indiquez un libellé');
+    if(amt<=0) return toast('Montant invalide');
+    S.expenses.push({id:S.expenses.length+1, date:TODAY, label:lab, amount:amt, wallet:val('e_wal')});
+    save(); render(); toast('Dépense enregistrée'); return;
+  }
+  if(a==='transfer'){
+    const from=val('t_from'), to=val('t_to'), amt=num('t_amt');
+    if(from===to) return toast('Choisissez deux caisses différentes');
+    if(amt<=0) return toast('Montant invalide');
+    S.opening[from]-=amt; S.opening[to]+=amt;
+    save(); render(); toast(`${FC(amt)} transféré de ${from} vers ${to}`); return;
+  }
+
+  /* --- facture, corrections et annulations --- */
+  if(a==='invoice'){ showInvoice(+b.dataset.id); return; }
+  if(a==='print-modal'){ imprimer(); return; }
+  if(a==='fix-sale'){ closeModal(); corrigerVente(+b.dataset.id); return; }
+  if(a==='cancel-sale'){ closeModal(); annulerVente(+b.dataset.id); return; }
+  if(a==='cancel-purchase'){ annulerAchat(+b.dataset.id); return; }
+  if(a==='cancel-money') return annulerSimple('money', +b.dataset.id, 'Annuler l’opération',
+    m=>`L'opération ${OPS[m.op]||m.op} de ${FC(m.amount)} (${m.wallet}) sera retirée : la caisse et la flotte reviennent à leur état d'avant, commission comprise.`);
+  if(a==='cancel-expense') return annulerSimple('expenses', +b.dataset.id, 'Annuler la dépense',
+    e=>`La dépense « ${e.label} » de ${FC(e.amount)} sera retirée et le montant reviendra dans « ${e.wallet} ».`);
+  if(a==='cancel-payment') return annulerSimple('payments', +b.dataset.id, 'Annuler le règlement',
+    p=>`Le règlement de ${FC(p.amount)} sera retiré : la caisse et la dette reviennent à leur état d'avant.`);
+
+  /* --- produits --- */
+  if(a==='prod-new') return productForm(null);
+  if(a==='prod-edit') return productForm(+b.dataset.id);
+
+  /* --- tiers --- */
+  if(a==='party-new') return partyForm(b.dataset.kind);
+  if(a==='party-hist') return partyHistory(b.dataset.kind, +b.dataset.id);
+  if(a==='pay-new') return paymentForm(b.dataset.kind, +b.dataset.id);
+});
+
+document.addEventListener('change', e=>{
+  if(e.target.id==='v_prod'){ const p=prod(+e.target.value); if(p) document.getElementById('v_pu').value=p.pv; margeEnDirect(); }
+  if(e.target.id==='a_prod'){ const p=prod(+e.target.value); if(p) document.getElementById('a_pu').value=p.pa; }
+});
+
+/* Ce que rapporte la ligne qu'on est en train de saisir, avant même de l'ajouter. */
+function margeEnDirect(){
+  const zone=document.getElementById('v_marge');
+  if(!zone) return;
+  const p=prod(+val('v_prod')), q=num('v_qty'), pu=num('v_pu');
+  if(!p || q<=0){ zone.innerHTML=''; return; }
+  const mgU = pu - p.pa, mg = mgU*q, rem = (p.pv-pu)*q;
+  const couleur = mgU<0 ? 'var(--bad)' : (p.pv>0 && mgU < (p.pv-p.pa)*0.4 ? 'var(--warn)' : 'var(--ok)');
+  zone.innerHTML =
+    `Catalogue <b class="num">${FC(p.pv)}</b>`
+    + (rem>0 ? ` · remise <b class="num" style="color:var(--warn)">${FC(rem)}</b>` : '')
+    + (rem<0 ? ` · au-dessus du catalogue de <b class="num">${FC(-rem)}</b>` : '')
+    + ` · achat <b class="num">${FC(p.pa)}</b>`
+    + ` · marge <b class="num" style="color:${couleur}">${mg<0?'−':'+'}${F(Math.abs(mg))} F</b>`
+    + (mgU<0 ? ' — <b style="color:var(--bad)">en dessous du prix d’achat</b>' : '');
+}
+
+/* La commission est proposée d'après le montant, mais dès que l'agent la corrige
+   à la main, l'application cesse de la recalculer : le barème de l'opérateur
+   change et c'est lui qui a raison, pas nous. */
+document.addEventListener('input', e=>{
+  if(['v_qty','v_pu'].includes(e.target.id)){ margeEnDirect(); return; }
+  if(e.target.id==='m_com'){ e.target.dataset.saisie='1'; return; }
+  if(e.target.id==='m_amt'){
+    const el=document.getElementById('m_com');
+    if(el && el.dataset.saisie!=='1')
+      el.value=Math.max(100,Math.round(parseFloat(e.target.value||0)*0.012/25)*25);
+  }
+});
+
+/* ============================ MODAL FORMS ============================ */
+function showInvoice(id){
+  const s=S.sales.find(x=>x.id===id); if(!s) return;
+  const c=s.cid?cust(s.cid):null;
+  const reste=s.total-s.paid;
+  openModal('Facture '+s.no, `
+    <div class="receipt">
+      <div style="text-align:center">
+        <b style="font-size:.95rem">${esc(S.settings.shop.name)}</b><br>
+        ${esc(S.settings.shop.line)}<br>
+        ${esc(S.settings.shop.addr)} — Tél. ${esc(S.settings.shop.phone)}
+      </div><hr>
+      <div class="l"><span>Facture</span><b>${esc(s.no)}</b></div>
+      <div class="l"><span>Date</span><span>${D(s.date)}</span></div>
+      <div class="l"><span>Client</span><span>${c?esc(c.name):'Comptant'}</span></div>
+      ${c?`<div class="l"><span>Téléphone</span><span>${esc(c.phone)}</span></div>`:''}
+      <hr>
+      ${s.lines.map(l=>`<div class="l"><span>${esc(prod(l.pid)?.name||'')} ×${qte(l.qty)}</span><span>${FC(l.qty*l.pu)}</span></div>
+        <div class="l" style="opacity:.6;font-size:.72rem"><span>&nbsp;&nbsp;@ ${FC(l.pu)} / ${esc(prod(l.pid)?.unit||'u')}${
+          (l.pc!=null && l.pc>l.pu) ? '  (remise ' + F((l.pc-l.pu)*l.qty) + ' F)' : ''}</span><span></span></div>`).join('')}
+      <hr>
+      ${s.remise>0?`<div class="l"><span>Sous-total</span><span>${FC(s.total+s.remise)}</span></div>
+        <div class="l"><span>Remise accordée</span><span>−${F(s.remise)} F</span></div>`:''}
+      <div class="l tot"><span>TOTAL</span><span>${FC(s.total)}</span></div>
+      <div class="l"><span>Payé (${esc(s.method)})</span><span>${FC(s.paid)}</span></div>
+      <div class="l"><span>Reste à payer</span><b style="color:${reste>0?'var(--bad)':'inherit'}">${FC(reste)}</b></div>
+      <hr>
+      <div style="text-align:center;font-size:.72rem;opacity:.7">Merci de votre confiance — I ni ce !</div>
+    </div>
+    ${s.annule?`<div class="alertbar bad noprint" style="margin-top:14px"><span><b>Facture annulée</b>
+      le ${D(s.annuleLe||s.date)}${s.motif?` — ${esc(s.motif)}`:''}. Elle ne compte plus dans vos chiffres,
+      et le stock a été remis.</span></div>`:''}`,
+    {hideFooter:false, submit:'Imprimer', cancel:'Fermer', onSubmit:()=>{ imprimer(); return false; },
+     extra: s.annule ? '' :
+       `<button class="btn" data-action="fix-sale" data-id="${s.id}">Corriger</button>
+        <button class="btn danger" data-action="cancel-sale" data-id="${s.id}">Annuler la vente</button>`});
+}
+
+/* ---------- corriger / annuler ---------- */
+
+function corrigerVente(id){
+  const s=S.sales.find(x=>x.id===id); if(!s||s.annule) return;
+  openModal('Corriger la vente '+s.no, `
+    <p class="hint" style="margin:0 0 12px">Total facturé <b class="num">${FC(s.total)}</b>.
+      Vous pouvez corriger ici ce que le client a réellement remis. Pour changer les articles,
+      annulez la vente et refaites-la.</p>
+    <div class="grid-f">
+      <label class="f">Montant payé<input id="fx_paid" type="number" min="0" step="25" value="${s.paid}"></label>
+      <label class="f">Encaissé par
+        <select id="fx_met">${METHODS.map(m=>`<option${m===s.method?' selected':''}>${m}</option>`).join('')}</select></label>
+    </div>
+    <p class="hint" style="margin:12px 0 0">La caisse et la dette du client suivront automatiquement.
+      Si le montant reste inférieur au total, la vente redevient une vente à crédit.</p>`,
+    {submit:'Enregistrer la correction', onSubmit:()=>{
+      const p=Math.max(0, Math.min(num('fx_paid'), s.total));
+      const encaisse = METHODS.includes(val('fx_met')) ? val('fx_met') : 'Espèces';
+      s.paid=p;
+      s.method = p<s.total ? 'Crédit' : encaisse;   // « Crédit » se déduit, ne se choisit pas
+      save(); closeModal(); render(); toast('Vente corrigée');
+    }});
+}
+
+function annulerVente(id){
+  const s=S.sales.find(x=>x.id===id); if(!s||s.annule) return;
+  openModal('Annuler la vente '+s.no, `
+    <p style="margin:0 0 12px">Cette vente de <b class="num">${FC(s.total)}</b>
+      ${s.cid?`à <b>${esc(cust(s.cid)?.name||'')}</b>`:'au comptant'} sera retirée de vos chiffres.</p>
+    <ul style="margin:0 0 14px; padding-left:20px; line-height:1.8">
+      <li>Le stock est remis : ${s.lines.map(l=>esc(prod(l.pid)?.name||'')+' +'+qte(l.qty)).join(', ')}</li>
+      ${s.paid>0?`<li>${FC(s.paid)} sont retirés de la caisse « ${esc(s.method==='Crédit'?'Caisse':s.method)} » — rendez l'argent au client</li>`:''}
+      ${s.total-s.paid>0 && s.cid?`<li>La dette de ${FC(s.total-s.paid)} disparaît</li>`:''}
+      <li>La facture reste dans l'historique, marquée « Annulée » : la trace de l'erreur est conservée</li>
+    </ul>
+    <label class="f">Motif (facultatif)<input id="fx_motif" placeholder="Ex. erreur de saisie, client a rendu la marchandise"></label>`,
+    {submit:'Confirmer l’annulation', onSubmit:()=>{
+      s.lines.forEach(l=>{ const p=prod(l.pid); if(p) p.stock=+(p.stock+l.qty).toFixed(2); });
+      s.annule=true; s.annuleLe=TODAY; s.motif=val('fx_motif').trim();
+      save(); closeModal(); render(); toast('Vente '+s.no+' annulée');
+    }});
+  const b=document.querySelector('#modal [data-action="modal-submit"]');
+  if(b){ b.classList.remove('primary'); b.classList.add('danger'); }
+}
+
+function annulerAchat(id){
+  const p=S.purchases.find(x=>x.id===id); if(!p||p.annule) return;
+  const manque=p.lines.filter(l=>(prod(l.pid)?.stock||0) < l.qty);
+  if(manque.length){
+    return openModal('Annulation impossible', `
+      <p style="margin:0">Cet achat a déjà été vendu, au moins en partie : il n'y a plus assez de stock
+        pour le retirer (${manque.map(l=>esc(prod(l.pid)?.name||'')+' — il reste '+qte(prod(l.pid)?.stock||0)+' au lieu de '+qte(l.qty)).join(' ; ')}).</p>
+      <p class="hint" style="margin:12px 0 0">Corrigez plutôt le stock depuis la page Stock, avec un ajustement
+        qui garde la trace de ce qui s'est passé.</p>`, {hideFooter:true});
+  }
+  openModal('Annuler l’achat '+p.no, `
+    <p style="margin:0 0 12px">Cet achat de <b class="num">${FC(p.total)}</b>
+      chez <b>${esc(supp(p.sid)?.name||'')}</b> sera retiré de vos chiffres.</p>
+    <ul style="margin:0 0 14px; padding-left:20px; line-height:1.8">
+      <li>Le stock est repris : ${p.lines.map(l=>esc(prod(l.pid)?.name||'')+' −'+qte(l.qty)).join(', ')}</li>
+      ${p.paid>0?`<li>${FC(p.paid)} reviennent dans la caisse « ${esc(p.method)} »</li>`:''}
+      ${p.total-p.paid>0?`<li>La dette de ${FC(p.total-p.paid)} envers le fournisseur disparaît</li>`:''}
+    </ul>
+    <label class="f">Motif (facultatif)<input id="fx_motif" placeholder="Ex. erreur de saisie"></label>`,
+    {submit:'Confirmer l’annulation', onSubmit:()=>{
+      p.lines.forEach(l=>{ const q=prod(l.pid); if(q) q.stock=+(q.stock-l.qty).toFixed(2); });
+      p.annule=true; p.annuleLe=TODAY; p.motif=val('fx_motif').trim();
+      save(); closeModal(); render(); toast('Achat '+p.no+' annulé');
+    }});
+  const b=document.querySelector('#modal [data-action="modal-submit"]');
+  if(b){ b.classList.remove('primary'); b.classList.add('danger'); }
+}
+
+/* Opérations sans stock : mobile money, dépenses, règlements. */
+function annulerSimple(liste, id, titre, decrire){
+  const x=S[liste].find(o=>o.id===id); if(!x||x.annule) return;
+  confirmer(titre, decrire(x) + ' Cette écriture restera visible dans le journal, marquée « Annulée ».',
+    'Confirmer l’annulation',
+    ()=>{ x.annule=true; x.annuleLe=TODAY; save(); render(); toast('Opération annulée'); });
+}
+
+function productForm(id){
+  const p = id?prod(id):{code:'',name:'',cat:'Bétail',unit:'sac 50kg',pa:0,pv:0,stock:0,min:0};
+  openModal(id?'Modifier le produit':'Nouveau produit', `
+    <div class="grid-f">
+      <label class="f">Code<input id="f_code" value="${esc(p.code)}"></label>
+      <label class="f" style="grid-column:span 2">Nom du produit<input id="f_name" value="${esc(p.name)}"></label>
+      <label class="f">Catégorie<input id="f_cat" value="${esc(p.cat)}"></label>
+      <label class="f">Unité<input id="f_unit" value="${esc(p.unit)}"></label>
+      <label class="f">Prix d'achat<input id="f_pa" type="number" step="25" value="${p.pa}"></label>
+      <label class="f">Prix de vente<input id="f_pv" type="number" step="25" value="${p.pv}"></label>
+      <label class="f">Stock<input id="f_stock" type="number" step="0.01" value="${p.stock}"></label>
+      <label class="f">Stock minimum<input id="f_min" type="number" step="0.01" value="${p.min}"></label>
+    </div>`,
+    {submit:id?'Enregistrer':'Ajouter', onSubmit:()=>{
+      const name=val('f_name').trim();
+      if(!name){ toast('Le nom est obligatoire'); return false; }
+      const o = {code:val('f_code').trim(), name, cat:val('f_cat').trim()||'Divers', unit:val('f_unit').trim()||'unité',
+                 pa:num('f_pa'), pv:num('f_pv'), stock:num('f_stock'), min:num('f_min')};
+      if(id) Object.assign(prod(id),o);
+      else S.products.push({id:Math.max(0,...S.products.map(x=>x.id))+1, ...o});
+      save(); closeModal(); render(); toast(id?'Produit modifié':'Produit ajouté');
+    }});
+}
+
+function partyForm(kind){
+  openModal(kind==='client'?'Nouveau client':'Nouveau fournisseur', `
+    <div class="grid-f">
+      <label class="f" style="grid-column:1/-1">Nom<input id="f_name" placeholder="Nom ou raison sociale"></label>
+      <label class="f">Téléphone<input id="f_phone" placeholder="76 00 00 00"></label>
+      <label class="f">Adresse<input id="f_addr" placeholder="Quartier, ville"></label>
+    </div>`,
+    {submit:'Ajouter', onSubmit:()=>{
+      const name=val('f_name').trim();
+      if(!name){ toast('Le nom est obligatoire'); return false; }
+      const arr = kind==='client'?S.customers:S.suppliers;
+      arr.push({id:Math.max(0,...arr.map(x=>x.id))+1, name, phone:val('f_phone').trim()||'—', addr:val('f_addr').trim()||'—'});
+      save(); closeModal(); render(); toast('Enregistré');
+    }});
+}
+
+function paymentForm(kind,id){
+  const who = kind==='client'?cust(id):supp(id);
+  const l = ledger(kind,id);
+  openModal((kind==='client'?'Encaisser — ':'Payer — ')+who.name, `
+    <p class="hint" style="margin-top:0">Solde ${kind==='client'?'dû par le client':'dû au fournisseur'} :
+      <b class="num" style="color:var(--bad);font-size:1.05rem">${FC(l.debt)}</b></p>
+    <div class="grid-f">
+      <label class="f">Montant<input id="f_amt" type="number" min="0" step="500" value="${l.debt||5000}"></label>
+      <label class="f">Mode<select id="f_met">${METHODS.map(m=>`<option>${m}</option>`).join('')}</select></label>
+      <label class="f" style="grid-column:1/-1">Note<input id="f_note" placeholder="Ex. Tranche du mois"></label>
+    </div>
+    <p class="hint">Le règlement est affecté aux ${kind==='client'?'factures':'achats'} les plus anciens d'abord.</p>`,
+    {submit:'Valider le règlement', onSubmit:()=>{
+      const amt=num('f_amt');
+      if(amt<=0){ toast('Montant invalide'); return false; }
+      S.payments.push({id:S.payments.length+1, date:TODAY, kind, pid:id, amount:amt,
+                       method:val('f_met'), note:val('f_note').trim()||'Tranche'});
+      save(); closeModal(); render(); toast('Règlement de '+FC(amt)+' enregistré');
+    }});
+}
+
+/* Sauvegarde par le texte : marche partout, y compris là où l'enregistrement
+   de fichier est bloqué. Le contenu se transmet par message ou par e-mail. */
+function copierSauvegarde(){
+  const txt = JSON.stringify(S);
+  openModal('Copier la sauvegarde', `
+    <p class="hint" style="margin:0 0 10px">Copiez tout ce texte et envoyez-le-vous par message.
+      Sur l'autre téléphone : Réglages → Coller une sauvegarde.</p>
+    <textarea id="bk_txt" readonly rows="7" style="width:100%; font-family:var(--font-mono);
+      font-size:.72rem; border:1px solid var(--line-strong); border-radius:5px; padding:10px;
+      background:var(--bg); color:var(--ink); resize:vertical">${esc(txt)}</textarea>
+    <p class="hint" style="margin:10px 0 0">${(new Blob([txt]).size/1024).toFixed(0)} Ko —
+      ${S.sales.length} vente${S.sales.length>1?'s':''}, ${S.customers.length} client${S.customers.length>1?'s':''}.</p>`,
+    {submit:'Copier', onSubmit:()=>{
+      const z=document.getElementById('bk_txt');
+      z.focus(); z.select(); z.setSelectionRange(0, txt.length);
+      let ok=false;
+      try{ ok = document.execCommand('copy'); }catch(e){}
+      if(!ok && navigator.clipboard){
+        navigator.clipboard.writeText(txt).then(()=>{ closeModal(); noterSauvegarde(); toast('Sauvegarde copiée'); })
+          .catch(()=>toast('Copie refusée — sélectionnez le texte à la main'));
+        return false;
+      }
+      if(ok){ closeModal(); noterSauvegarde(); toast('Sauvegarde copiée'); return; }
+      toast('Copie refusée — sélectionnez le texte à la main');
+      return false;
+    }});
+}
+
+function collerSauvegarde(){
+  openModal('Coller une sauvegarde', `
+    <p class="hint" style="margin:0 0 10px">Collez ici le texte de la sauvegarde.
+      Les données actuelles de ce téléphone seront remplacées.</p>
+    <textarea id="bk_in" rows="7" placeholder='{"version":1,...}' style="width:100%;
+      font-family:var(--font-mono); font-size:.72rem; border:1px solid var(--line-strong);
+      border-radius:5px; padding:10px; background:var(--bg); color:var(--ink); resize:vertical"></textarea>`,
+    {submit:'Restaurer', onSubmit:()=>{
+      const t=(document.getElementById('bk_in').value||'').trim();
+      if(!t){ toast('Collez d’abord le texte'); return false; }
+      closeModal();
+      window.recevoirSauvegarde(t);
+    }});
+}
+
+function confirmer(titre, texte, libelle, onOui){
+  openModal(titre, `<p style="margin:0">${esc(texte)}</p>`,
+    {submit:libelle, onSubmit:()=>{ closeModal(); onOui(); }});
+  const b=document.querySelector('#modal [data-action="modal-submit"]');
+  if(b){ b.classList.remove('primary'); b.classList.add('danger'); }
+}
+
+function partyHistory(kind,id){
+  const who = kind==='client'?cust(id):supp(id);
+  const l = ledger(kind,id);
+  const pays = S.payments.filter(p=>p.kind===kind&&p.pid===id).sort((a,b)=>b.date.localeCompare(a.date));
+  openModal('Compte — '+who.name, `
+    <div class="kpis" style="grid-template-columns:1fr 1fr">
+      <div class="kpi"><div class="lab">Solde</div><div class="val" style="color:${l.debt>0?'var(--bad)':'var(--ok)'}">${F(l.debt)}<small>F</small></div></div>
+      <div class="kpi"><div class="lab">${kind==='client'?'Factures':'Achats'}</div><div class="val">${l.rows.length}</div></div>
+    </div>
+    <h3 style="margin:18px 0 6px">${kind==='client'?'Factures':'Achats'}</h3>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Réf.</th><th>Date</th><th class="r">Total</th><th class="r">Réglé</th><th class="r">Reste</th></tr></thead>
+      <tbody>${l.rows.slice().reverse().map(r=>`<tr><td class="mono" style="font-size:.78rem">${esc(r.ref)}</td>
+        <td class="mono">${D(r.date)}</td><td class="r mono">${FC(r.total)}</td><td class="r mono">${FC(r.regle)}</td>
+        <td class="r mono">${r.reste>0?`<b style="color:var(--bad)">${FC(r.reste)}</b>`:'<span class="pill ok"><i></i>Soldé</span>'}</td></tr>`).join('')
+        || '<tr><td colspan="5" class="empty">Aucun document</td></tr>'}</tbody>
+    </table></div>
+    <h3 style="margin:18px 0 6px">Règlements</h3>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Date</th><th class="r">Montant</th><th>Mode</th><th>Note</th></tr></thead>
+      <tbody>${pays.map(p=>`<tr${p.annule?' style="opacity:.55"':''}><td class="mono">${D(p.date)}</td>
+        <td class="r mono"${p.annule?' style="text-decoration:line-through"':''}><b>${FC(p.amount)}</b></td>
+        <td><span class="pill neutral">${esc(p.method)}</span></td>
+        <td class="hint">${esc(p.note)}${p.annule?' — annulé':''}</td></tr>`).join('')
+        || '<tr><td colspan="4" class="empty">Aucun règlement</td></tr>'}</tbody>
+    </table></div>`,
+    {wide:true, hideFooter:true});
+}
+
+/* ============================ BOUTON RETOUR ANDROID ============================
+ * Appelé depuis l'application Android. Renvoie true si l'appli a géré le retour,
+ * false si Android doit fermer l'application.
+ * ============================================================================= */
+window.androidBack = function(){
+  if(!document.getElementById('scrim').hidden){ closeModal(); return true; }
+  if(!document.getElementById('boot').hidden) return false;
+  if(page !== 'dash'){ page='dash'; render(); return true; }
+  return false;
+};
+
+/* ============================ DÉMARRAGE ============================ */
+try{ const th=localStorage.getItem('doq_theme'); if(th) document.documentElement.setAttribute('data-theme',th); }catch(e){}
+
+if(load()){
+  const h=(location.hash||'').replace('#','');
+  if(PAGES.some(p=>p.id===h)) page=h;      // raccourcis de l'écran d'accueil
+  render();
+} else {
+  document.getElementById('boot').hidden = false;   // premier lancement : on demande quoi faire
+}
+
+/* Service worker : rend l'application utilisable sans réseau une fois installée.
+   Inutile dans l'application Android, qui lit déjà ses fichiers en local. */
+if('serviceWorker' in navigator && location.protocol.startsWith('http')){
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch(()=>{});
+  });
+}
+</script>
+</body>
+</html>

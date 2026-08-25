@@ -1,0 +1,109 @@
+name: Construire l'APK
+
+# Se déclenche à chaque envoi de code, et manuellement depuis l'onglet Actions.
+on:
+  push:
+    branches: ['**']
+  workflow_dispatch:
+
+jobs:
+  apk:
+    name: APK Android
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Récupérer le code
+        uses: actions/checkout@v4
+
+      - name: Installer Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Préparer Gradle
+        uses: gradle/actions/setup-gradle@v3
+
+      - name: Autoriser le script gradlew
+        run: chmod +x android/gradlew
+
+      # La clé de signature vient des secrets du dépôt. Sans elle, l'application
+      # sort non signée : bonne pour essayer, incapable de mettre à jour une
+      # installation existante. Voir le workflow « Créer la clé de signature ».
+      - name: Installer la clé de signature
+        id: cle
+        env:
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+        run: |
+          if [ -n "$KEYSTORE_BASE64" ]; then
+            echo "$KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/drame-og.jks"
+            echo "signee=oui" >> "$GITHUB_OUTPUT"
+            echo "Clé trouvée : l'application sera signée."
+          else
+            echo "signee=non" >> "$GITHUB_OUTPUT"
+            echo "Aucune clé : l'application sortira non signée."
+          fi
+
+      - name: Construire
+        working-directory: android
+        env:
+          DOQ_KEYSTORE: ${{ steps.cle.outputs.signee == 'oui' && format('{0}/drame-og.jks', runner.temp) || '' }}
+          DOQ_KEYSTORE_PASS: ${{ secrets.KEYSTORE_PASSWORD }}
+          DOQ_KEY_ALIAS: drame-og
+        run: ./gradlew --no-daemon assembleRelease assembleDebug
+
+      - name: Rassembler les fichiers
+        id: fichiers
+        run: |
+          mkdir -p sortie
+          if [ -f android/app/build/outputs/apk/release/app-release.apk ]; then
+            cp android/app/build/outputs/apk/release/app-release.apk "sortie/DRAME-OG.apk"
+            echo "principal=DRAME-OG.apk" >> "$GITHUB_OUTPUT"
+          else
+            cp android/app/build/outputs/apk/release/app-release-unsigned.apk \
+               "sortie/DRAME-OG-non-signe.apk"
+            echo "principal=DRAME-OG-non-signe.apk" >> "$GITHUB_OUTPUT"
+          fi
+          cp android/app/build/outputs/apk/debug/app-debug.apk "sortie/DRAME-OG-essai.apk"
+          ls -lh sortie
+
+      - name: Résumé
+        env:
+          SIGNEE: ${{ steps.cle.outputs.signee }}
+          PRINCIPAL: ${{ steps.fichiers.outputs.principal }}
+        run: |
+          {
+            echo "## L'application est prête"
+            echo ""
+            echo "Téléchargez **DRAME-OG-apk** en bas de cette page, section *Artifacts*."
+            echo ""
+            if [ "$SIGNEE" = "oui" ]; then
+              echo "### \`$PRINCIPAL\` — c'est celle-ci qu'il faut installer"
+              echo ""
+              echo "Signée avec votre clé. Les prochaines versions s'installeront par-dessus"
+              echo "sans toucher aux données de la boutique."
+            else
+              echo "### Attention : application non signée"
+              echo ""
+              echo "\`$PRINCIPAL\` s'installe, mais **aucune mise à jour ne pourra"
+              echo "s'installer par-dessus** : il faudrait désinstaller, donc perdre les données."
+              echo ""
+              echo "Avant de commencer à travailler pour de vrai, lancez une fois le workflow"
+              echo "**Créer la clé de signature**, enregistrez les deux secrets qu'il indique,"
+              echo "puis relancez cette construction."
+            fi
+            echo ""
+            echo "### \`DRAME-OG-essai.apk\`"
+            echo ""
+            echo "Version d'essai, qui s'installe **à côté** de la vraie sans l'écraser."
+            echo "Pratique pour montrer l'application ou tester une nouveauté."
+            echo "Ne l'utilisez pas pour votre comptabilité."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Déposer les APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: DRAME-OG-apk
+          path: sortie/*.apk
+          retention-days: 90
+          if-no-files-found: error

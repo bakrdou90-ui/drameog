@@ -1,0 +1,4 @@
+// Projet racine — le plugin Android est déclaré ici, appliqué dans app/build.gradle
+plugins {
+    id 'com.android.application' version '8.6.1' apply false
+}

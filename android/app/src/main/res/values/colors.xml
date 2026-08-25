@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="indigo">#2B4162</color>
+    <color name="indigo_sombre">#1F3049</color>
+    <color name="fond">#FBFAF7</color>
+    <color name="fond_nuit">#121510</color>
+</resources>

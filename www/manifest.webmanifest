@@ -1,0 +1,25 @@
+{
+  "name": "DRAME OG BU LA QUALITÉ — Gestion",
+  "short_name": "DRAME OG",
+  "description": "Gestion de boutique d'aliments bétail et volaille : ventes, stock, dettes, Orange Money et Wave, caisse et rapports.",
+  "lang": "fr",
+  "dir": "ltr",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#FBFAF7",
+  "theme_color": "#2B4162",
+  "categories": ["business", "finance", "productivity"],
+  "icons": [
+    { "src": "icons/icon-192.png",         "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png",         "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-maskable-192.png","sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "icons/icon-maskable-512.png","sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Nouvelle vente",   "short_name": "Vente",  "url": "./index.html#sales" },
+    { "name": "Orange / Wave",    "short_name": "Mobile", "url": "./index.html#money" },
+    { "name": "Caisse",           "short_name": "Caisse", "url": "./index.html#caisse" }
+  ]
+}

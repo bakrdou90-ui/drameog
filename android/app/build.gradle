@@ -1,0 +1,89 @@
+plugins {
+    id 'com.android.application'
+}
+
+/*
+ * Clé de signature.
+ *
+ * Android n'accepte d'installer une mise à jour par-dessus une application
+ * existante que si les deux sont signées avec LA MÊME clé. Sinon il faut
+ * désinstaller — et la désinstallation efface les données de la boutique.
+ *
+ * La clé se fournit par variables d'environnement (c'est ce que fait GitHub) :
+ *   DOQ_KEYSTORE      chemin du fichier .jks
+ *   DOQ_KEYSTORE_PASS mot de passe du fichier
+ *   DOQ_KEY_ALIAS     nom de la clé   (par défaut : drame-og)
+ *   DOQ_KEY_PASS      mot de passe de la clé (par défaut : celui du fichier)
+ *
+ * Sans clé, la version de publication sort non signée : utilisable pour
+ * essayer, mais pas pour mettre à jour une installation existante.
+ */
+def cleFichier = System.getenv('DOQ_KEYSTORE') ?: project.findProperty('doq.keystore')
+def cleMdp     = System.getenv('DOQ_KEYSTORE_PASS') ?: project.findProperty('doq.keystorePassword')
+def cleAlias   = System.getenv('DOQ_KEY_ALIAS') ?: project.findProperty('doq.keyAlias') ?: 'drame-og'
+def cleMdpAlias = System.getenv('DOQ_KEY_PASS') ?: project.findProperty('doq.keyPassword') ?: cleMdp
+def signatureDisponible = cleFichier != null && !cleFichier.toString().isEmpty() && file(cleFichier).exists()
+
+android {
+    namespace 'ml.drameog.gestion'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "ml.drameog.gestion"
+        minSdk 24                 // Android 7.0 — couvre la quasi-totalité du parc
+        targetSdk 34
+        versionCode 1
+        versionName "1.0"
+    }
+
+    // L'application web vit dans le dossier www/ à la racine du dépôt.
+    // Elle est embarquée telle quelle : un seul code source pour le web et pour Android.
+    sourceSets {
+        main {
+            assets.srcDirs += ['../../www']
+        }
+    }
+
+    buildFeatures {
+        buildConfig true
+    }
+
+    signingConfigs {
+        release {
+            if (signatureDisponible) {
+                storeFile file(cleFichier)
+                storePassword cleMdp
+                keyAlias cleAlias
+                keyPassword cleMdpAlias
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false          // application minuscule : rien à gagner, un risque de moins
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            if (signatureDisponible) {
+                signingConfig signingConfigs.release
+            }
+        }
+        debug {
+            applicationIdSuffix ".debug"   // s'installe à côté de la vraie, sans l'écraser
+            versionNameSuffix "-essai"
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    packagingOptions {
+        resources {
+            excludes += ['META-INF/*']
+        }
+    }
+}
+
+// Aucune dépendance : uniquement le SDK Android.
+dependencies { }
